@@ -8,53 +8,123 @@ Justin's dotfiles and configuration for Omarchy Linux (Arch-based with Hyprland)
 
 1. **Clone this repository:**
 ```bash
-   git clone https://github.com/justcarlson/omarchy-dotfiles.git ~/dotfiles
-   cd ~/dotfiles
+git clone https://github.com/justcarlson/omarchy-dotfiles.git ~/dotfiles
+cd ~/dotfiles
 ```
 
 2. **Install apps:** (Optional but recommended)
 ```bash
-   chmod +x install-my-apps.sh
-   ./install-my-apps.sh
+chmod +x install-my-apps.sh
+./install-my-apps.sh
 ```
    See [README-apps.md](README-apps.md) for details on the 171+ packages included.
 
-3. **Restore dotfiles with Stow:**
+3. **Install dotfiles:**
 ```bash
-   stow omarchy-config
+chmod +x install.sh
+./install.sh
+```
+
+   **Important:**
+   - **DO NOT use `sudo`** - the script doesn't need it
+   - The script will automatically backup your existing configs to `~/omarchy-backup-TIMESTAMP/`
+   - It installs GNU Stow if needed and creates symlinks to your dotfiles
+
+### If You Get Conflicts
+
+If the install script fails with "cannot stow" errors, you have existing configs that need to be moved first:
+
+**Option 1: Manual backup** (recommended for clean install)
+```bash
+# Backup your current configs
+mkdir -p ~/omarchy-backup-manual
+mv ~/.config/hypr ~/omarchy-backup-manual/
+mv ~/.config/waybar ~/omarchy-backup-manual/
+mv ~/.config/walker ~/omarchy-backup-manual/
+mv ~/.config/ghostty ~/omarchy-backup-manual/
+mv ~/.config/uwsm ~/omarchy-backup-manual/
+mv ~/.config/starship.toml ~/omarchy-backup-manual/
+mv ~/.bashrc ~/omarchy-backup-manual/
+mv ~/.XCompose ~/omarchy-backup-manual/
+
+# Run the install script
+./install.sh
+```
+
+**Option 2: Adopt existing configs** (merges your current configs into the repo)
+```bash
+cd ~/dotfiles
+stow --adopt omarchy-config
 ```
 
 ## What's Included
 
-- **`omarchy-config/`** - Dotfiles for Hyprland, Waybar, Ghostty, Alacritty, etc.
+- **`omarchy-config/`** - Dotfiles for Hyprland, Waybar, Ghostty, Walker, uwsm, etc.
 - **`install-my-apps.sh`** - Automated installation of 171 packages organized by category
-- **`install.sh`** - Original installation script
+- **`install.sh`** - Backup and stow installation script
+
+### Configured Applications
+
+- **Hyprland** - Window manager
+- **Waybar** - Top bar
+- **Walker** - Launcher
+- **Ghostty** - Terminal
+- **uwsm** - Session manager
+- **Starship** - Shell prompt
+- **.bashrc and .XCompose** - Shell and input configs
 
 ## Documentation
 
 - **[App Installation Guide](README-apps.md)** - Details on automated package installation
 - All configs are managed with [GNU Stow](https://www.gnu.org/software/stow/)
 
-## Updating
+## Updating Configs
 
-### Backup new configs to this repo:
+### Save your local changes to the repo:
 ```bash
 cd ~/dotfiles
-# Stow automatically links files, so just commit changes:
 git add -A
 git commit -m "Update configs"
 git push
 ```
 
-### Pull latest configs:
+Since Stow creates symlinks, editing files in `~/.config/` automatically updates the files in `~/dotfiles/`.
+
+### Pull latest configs from the repo:
 ```bash
 cd ~/dotfiles
 git pull
-# Stow will automatically use updated files
 ```
+
+Changes are immediately active since the files are symlinked.
+
+## Uninstalling
+
+To remove the symlinks and restore your configs to regular files:
+```bash
+cd ~/dotfiles
+stow -D omarchy-config
+```
+
+Your backup configs will still be in `~/omarchy-backup-*/` if you need them.
 
 ## Notes
 
+- **Never run install scripts with `sudo`** - they don't need it
 - Uses GNU Stow for symlink management
 - Designed for Omarchy Linux (Arch-based, Hyprland WM)
 - Optimized for Apple T2 MacBooks
+
+## Troubleshooting
+
+**"Permission denied" when running scripts:**
+```bash
+chmod +x install.sh
+chmod +x install-my-apps.sh
+```
+
+**"command not found" with sudo:**
+Don't use sudo. Run scripts as your regular user.
+
+**Stow conflicts:**
+See "If You Get Conflicts" section above.
