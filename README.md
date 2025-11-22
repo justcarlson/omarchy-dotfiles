@@ -8,7 +8,7 @@ Justin's dotfiles and configuration for Omarchy Linux (Arch-based with Hyprland)
 
 1. **Clone this repository:**
 ```bash
-git clone https://github.com/justcarlson/omarchy-dotfiles.git ~/dotfiles
+git clone git@github.com:justcarlson/omarchy-dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
