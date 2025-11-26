@@ -4,7 +4,10 @@
 export TERMINAL=ghostty
 
 # Use code for VSCode
-export EDITOR=nvim
+export EDITOR=code
+
+# Google Chrome Beta
+export BROWSER=google-chrome-beta
 
 # Use a custom directory for screenshots (remember to make the directory!)
 # export OMARCHY_SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
