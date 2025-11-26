@@ -2,33 +2,42 @@
 
 Justin's dotfiles and configuration for Omarchy Linux (Arch-based with Hyprland).
 
+## Prerequisites
+
+This repo requires SSH authentication. Configure 1Password SSH agent first:
+
+1. Open 1Password > Settings > Developer
+2. Enable "Use the SSH agent"
+3. Add your GitHub SSH key to 1Password
+4. Create/update `~/.ssh/config`:
+   ```
+   Host github.com
+     IdentityAgent ~/.1password/agent.sock
+   ```
+
 ## Quick Start
 
 ### Fresh Omarchy Installation
 
 1. **Clone this repository:**
-```bash
-git clone git@github.com:justcarlson/omarchy-dotfiles.git ~/dotfiles
-cd ~/dotfiles
-```
+   ```bash
+   git clone git@github.com:justcarlson/omarchy-dotfiles.git ~/dotfiles
+   ```
 
-2. **Install apps:** (Optional but recommended)
-```bash
-chmod +x install-my-apps.sh
-./install-my-apps.sh
-```
-   See [README-apps.md](README-apps.md) for details on the 171+ packages included.
+2. **Run the installer:**
+   ```bash
+   cd ~/dotfiles
+   chmod +x install.sh
+   ./install.sh
+   ```
 
-3. **Install dotfiles:**
-```bash
-chmod +x install.sh
-./install.sh
-```
+   The script will:
+   - Back up existing configs to `~/omarchy-backup-TIMESTAMP/`
+   - Install GNU Stow if needed
+   - Create symlinks to your dotfiles
+   - Offer to install 3 additional apps (VSCode, Chrome Beta, Solaar)
 
-   **Important:**
-   - **DO NOT use `sudo`** - the script doesn't need it
-   - The script will automatically backup your existing configs to `~/omarchy-backup-TIMESTAMP/`
-   - It installs GNU Stow if needed and creates symlinks to your dotfiles
+   **Important:** Do NOT use `sudo` - the script doesn't need it.
 
 ### If You Get Conflicts
 
@@ -60,8 +69,8 @@ stow --adopt omarchy-config
 ## What's Included
 
 - **`omarchy-config/`** - Dotfiles for Hyprland, Waybar, Ghostty, Walker, uwsm, etc.
-- **`install-my-apps.sh`** - Automated installation of 171 packages organized by category
-- **`install.sh`** - Backup and stow installation script
+- **`install.sh`** - Backup, stow, and optional app installation
+- **`README-apps.md`** - Reference list of packages
 
 ### Configured Applications
 
@@ -75,7 +84,7 @@ stow --adopt omarchy-config
 
 ## Documentation
 
-- **[App Installation Guide](README-apps.md)** - Details on automated package installation
+- **[Package Reference](README-apps.md)** - List of optional and pre-installed packages
 - All configs are managed with [GNU Stow](https://www.gnu.org/software/stow/)
 
 ## Updating Configs
@@ -120,7 +129,6 @@ Your backup configs will still be in `~/omarchy-backup-*/` if you need them.
 **"Permission denied" when running scripts:**
 ```bash
 chmod +x install.sh
-chmod +x install-my-apps.sh
 ```
 
 **"command not found" with sudo:**

@@ -27,6 +27,78 @@ fi
 
 echo ""
 
+# Packages not pre-installed on Omarchy but referenced in configs
+# Format: "package|category|description"
+OPTIONAL_PACKAGES=(
+    "visual-studio-code-bin|Editor|Default editor (EDITOR=code)"
+    "google-chrome-beta|Browser|Default browser (BROWSER)"
+    "solaar|Utilities|Logitech device manager"
+)
+
+# Display available packages
+display_packages() {
+    local i=1
+    for entry in "${OPTIONAL_PACKAGES[@]}"; do
+        IFS='|' read -r pkg category desc <<< "$entry"
+        printf "  %d. %-24s %s\n" "$i" "$pkg" "- $desc"
+        ((i++))
+    done
+}
+
+# Install packages with progress reporting
+install_packages() {
+    local -a packages=("$@")
+    local total=${#packages[@]}
+    local current=0
+    local -a failed=()
+
+    echo ""
+    for pkg in "${packages[@]}"; do
+        ((current++))
+        printf "[%d/%d] Installing %s... " "$current" "$total" "$pkg"
+        if yay -S --noconfirm "$pkg" &>/dev/null; then
+            echo "✅"
+        else
+            echo "❌"
+            failed+=("$pkg")
+        fi
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        echo ""
+        echo "⚠️  Some packages failed to install:"
+        for pkg in "${failed[@]}"; do
+            echo "   yay -S $pkg"
+        done
+    fi
+}
+
+# Interactive package selection
+select_packages() {
+    local -a selected=()
+    echo ""
+    echo "Enter package numbers separated by spaces (e.g., '1 3')"
+    echo "Or press Enter to install all:"
+    read -r selection
+
+    if [ -z "$selection" ]; then
+        # Return all packages
+        for entry in "${OPTIONAL_PACKAGES[@]}"; do
+            IFS='|' read -r pkg _ _ <<< "$entry"
+            selected+=("$pkg")
+        done
+    else
+        for num in $selection; do
+            if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "${#OPTIONAL_PACKAGES[@]}" ]; then
+                local entry="${OPTIONAL_PACKAGES[$((num-1))]}"
+                IFS='|' read -r pkg _ _ <<< "$entry"
+                selected+=("$pkg")
+            fi
+        done
+    fi
+    echo "${selected[@]}"
+}
+
 # Define configs that will be managed
 CONFIGS=(
     ".config/hypr"
@@ -98,6 +170,48 @@ if stow omarchy-config; then
         echo ""
     fi
     echo "⚠️  You may need to restart Hyprland or reboot for all changes to take effect."
+    echo ""
+
+    # Prompt for optional app installation
+    echo "--------------------------------------"
+    echo "  Optional: Install Additional Apps"
+    echo "--------------------------------------"
+    echo ""
+    echo "Your configs reference ${#OPTIONAL_PACKAGES[@]} packages not pre-installed on Omarchy:"
+    echo ""
+    display_packages
+    echo ""
+    read -p "Install apps? [Y]es all / [n]o / [s]elect: " -n 1 -r choice
+    echo ""
+
+    case "${choice,,}" in
+        n)
+            echo ""
+            echo "Skipping app installation."
+            echo "You can install them later with: yay -S <package>"
+            ;;
+        s)
+            selected=($(select_packages))
+            if [ ${#selected[@]} -gt 0 ]; then
+                install_packages "${selected[@]}"
+                echo ""
+                echo "✅ App installation complete!"
+            else
+                echo "No packages selected."
+            fi
+            ;;
+        *)
+            # Default: install all
+            all_packages=()
+            for entry in "${OPTIONAL_PACKAGES[@]}"; do
+                IFS='|' read -r pkg _ _ <<< "$entry"
+                all_packages+=("$pkg")
+            done
+            install_packages "${all_packages[@]}"
+            echo ""
+            echo "✅ App installation complete!"
+            ;;
+    esac
     echo ""
 else
     echo ""
