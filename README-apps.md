@@ -12,6 +12,7 @@ These are offered during `./install.sh`:
 | google-chrome-beta | Web browser | `BROWSER` in uwsm/default |
 | tailscale | Mesh VPN | Remote access |
 | solaar | Logitech device manager | For MX mice/keyboards |
+| python-pipx | Isolated Python apps | Required for PyGPT |
 
 ## Pre-installed on Omarchy
 
@@ -29,6 +30,14 @@ These are included in Omarchy's base packages and referenced in bindings.conf:
 | ghostty | Terminal | TERMINAL env |
 | 1password-beta | Password manager | Super+Shift+/ |
 | nautilus | File manager | Super+Shift+F |
+
+## Installed via pipx
+
+These are offered during `./install.sh` after the yay packages:
+
+| Package | Purpose | Install Command |
+|---------|---------|-----------------|
+| pygpt-net | PyGPT AI assistant | `pipx install pygpt-net` |
 
 ## Manual Installation
 

@@ -34,6 +34,7 @@ OPTIONAL_PACKAGES=(
     "google-chrome-beta|Browser|Default browser (BROWSER)"
     "tailscale|Networking|Mesh VPN"
     "solaar|Utilities|Logitech device manager"
+    "python-pipx|Python|Isolated Python app installer"
 )
 
 # Display available packages
@@ -213,6 +214,46 @@ if stow omarchy-config; then
             echo "✅ App installation complete!"
             ;;
     esac
+
+    # Prompt for pipx-based apps
+    echo ""
+    echo "--------------------------------------"
+    echo "  Optional: Install PyGPT via pipx"
+    echo "--------------------------------------"
+    echo ""
+
+    # Auto-install pipx if not available
+    if ! command -v pipx &> /dev/null; then
+        echo "📦 pipx not found. Installing..."
+        if yay -S --noconfirm python-pipx &>/dev/null; then
+            echo "✅ pipx installed successfully"
+            # Ensure pipx path is available in current session
+            export PATH="$HOME/.local/bin:$PATH"
+        else
+            echo "❌ Failed to install pipx"
+            echo "   Install manually with: yay -S python-pipx"
+            echo "   Then run: pipx install pygpt-net"
+        fi
+    fi
+
+    if command -v pipx &> /dev/null; then
+        read -p "Install PyGPT AI assistant? [y/N]: " -n 1 -r pygpt_choice
+        echo ""
+
+        if [[ "${pygpt_choice,,}" == "y" ]]; then
+            echo "Installing PyGPT via pipx..."
+            if pipx install pygpt-net; then
+                echo "✅ PyGPT installed successfully"
+                echo ""
+                echo "Run with: pygpt"
+            else
+                echo "❌ PyGPT installation failed"
+                echo "   Try manually: pipx install pygpt-net"
+            fi
+        else
+            echo "Skipping PyGPT. Install later with: pipx install pygpt-net"
+        fi
+    fi
     echo ""
 else
     echo ""
