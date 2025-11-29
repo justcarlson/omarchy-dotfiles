@@ -36,6 +36,15 @@ OPTIONAL_PACKAGES=(
     "solaar|Utilities|Logitech device manager"
 )
 
+# Track skipped apps for autostart cleanup
+SKIPPED_APPS=()
+
+# Map package names to autostart entry patterns
+declare -A AUTOSTART_MAP=(
+    ["google-chrome-beta"]="exec-once = uwsm-app -- google-chrome-beta"
+    ["pygpt-net"]="exec-once = uwsm-app -- pygpt"
+)
+
 # Display available packages
 display_packages() {
     local i=1
@@ -98,6 +107,30 @@ select_packages() {
         done
     fi
     echo "${selected[@]}"
+}
+
+# Comment out autostart entries for skipped apps
+cleanup_autostart() {
+    local autostart_file="$HOME/.config/hypr/autostart.conf"
+
+    if [ ! -f "$autostart_file" ]; then
+        return
+    fi
+
+    local modified=false
+    for app in "${SKIPPED_APPS[@]}"; do
+        local pattern="${AUTOSTART_MAP[$app]}"
+        if [ -n "$pattern" ] && grep -q "^${pattern}$" "$autostart_file" 2>/dev/null; then
+            # Comment out the line
+            sed -i "s|^${pattern}$|# ${pattern}  # Commented: not installed|" "$autostart_file"
+            echo "  ✓ Commented out autostart for: $app"
+            modified=true
+        fi
+    done
+
+    if [ "$modified" = true ]; then
+        echo ""
+    fi
 }
 
 # Define configs that will be managed
@@ -190,6 +223,13 @@ if stow omarchy-config; then
             echo ""
             echo "Skipping app installation."
             echo "You can install them later with: yay -S <package>"
+            # Track all skipped packages that have autostart entries
+            for entry in "${OPTIONAL_PACKAGES[@]}"; do
+                IFS='|' read -r pkg _ _ <<< "$entry"
+                if [ -n "${AUTOSTART_MAP[$pkg]}" ]; then
+                    SKIPPED_APPS+=("$pkg")
+                fi
+            done
             ;;
         s)
             selected=($(select_packages))
@@ -200,6 +240,22 @@ if stow omarchy-config; then
             else
                 echo "No packages selected."
             fi
+            # Track skipped packages that have autostart entries
+            for entry in "${OPTIONAL_PACKAGES[@]}"; do
+                IFS='|' read -r pkg _ _ <<< "$entry"
+                if [ -n "${AUTOSTART_MAP[$pkg]}" ]; then
+                    local is_selected=false
+                    for sel in "${selected[@]}"; do
+                        if [ "$sel" == "$pkg" ]; then
+                            is_selected=true
+                            break
+                        fi
+                    done
+                    if [ "$is_selected" = false ]; then
+                        SKIPPED_APPS+=("$pkg")
+                    fi
+                fi
+            done
             ;;
         *)
             # Default: install all
@@ -252,12 +308,18 @@ if stow omarchy-config; then
                 echo "   Try manually: pipx install pygpt-net"
             fi
         else
-            echo "Skipping PyGPT."
-            echo "⚠️  Note: PyGPT is configured to autostart in hypr/autostart.conf"
-            echo "   Remove or comment out the 'exec-once = uwsm-app -- pygpt' line if not installing."
-            echo "   Install later with: pipx install pygpt-net"
+            echo "Skipping PyGPT. Install later with: pipx install pygpt-net"
+            SKIPPED_APPS+=("pygpt-net")
         fi
     fi
+
+    # Clean up autostart entries for skipped apps
+    if [ ${#SKIPPED_APPS[@]} -gt 0 ]; then
+        echo ""
+        echo "🧹 Cleaning up autostart for skipped apps..."
+        cleanup_autostart
+    fi
+
     echo ""
 else
     echo ""
