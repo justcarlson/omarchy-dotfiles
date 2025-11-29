@@ -12,6 +12,10 @@ These are offered during `./install.sh`:
 | google-chrome-beta | Web browser | `BROWSER` in uwsm/default |
 | tailscale | Mesh VPN | Remote access |
 | solaar | Logitech device manager | For MX mice/keyboards |
+| tree | Directory tree viewer | CLI |
+| bun-bin | JavaScript runtime | CLI |
+| claude-code | Claude Code CLI | CLI |
+| wev | Wayland event viewer | Debugging keybindings |
 
 ## Pre-installed on Omarchy
 

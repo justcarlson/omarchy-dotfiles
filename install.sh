@@ -34,6 +34,10 @@ OPTIONAL_PACKAGES=(
     "google-chrome-beta|Browser|Default browser (BROWSER)"
     "tailscale|Networking|Mesh VPN"
     "solaar|Utilities|Logitech device manager"
+    "tree|Utilities|Directory tree viewer"
+    "bun-bin|Development|JavaScript runtime"
+    "claude-code|Development|Claude Code CLI"
+    "wev|Utilities|Wayland event viewer"
 )
 
 # Track skipped apps for autostart cleanup
