@@ -32,3 +32,6 @@ alias c-haiku='claude --model haiku'
 alias c-yolo='claude --dangerously-skip-permissions --model opus'
 alias c-resume='claude --resume'
 alias c-r='claude --resume'
+
+# Created by `pipx` on 2025-11-29 19:23:05
+export PATH="$PATH:/home/justincarlson/.local/bin"
