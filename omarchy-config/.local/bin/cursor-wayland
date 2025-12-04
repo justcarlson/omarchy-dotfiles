@@ -1,0 +1,17 @@
+#!/bin/bash
+# Cursor Wayland launcher - auto-finds latest AppImage
+
+CURSOR_DIR="/opt"
+CURSOR_APPIMAGE=$(find "$CURSOR_DIR" -maxdepth 1 -name "cursor*.AppImage" -type f 2>/dev/null | sort -V | tail -n 1)
+
+if [ ! -f "$CURSOR_APPIMAGE" ]; then
+    echo "Error: Cursor AppImage not found in $CURSOR_DIR"
+    exit 1
+fi
+
+[ ! -x "$CURSOR_APPIMAGE" ] && chmod +x "$CURSOR_APPIMAGE"
+
+WAYLAND_ARGS="--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime"
+
+nohup "$CURSOR_APPIMAGE" "$@" $WAYLAND_ARGS > /dev/null 2>&1 &
+disown
