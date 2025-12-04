@@ -18,14 +18,17 @@ Personal dotfiles repository for Omarchy Linux (Arch-based with Hyprland window 
 ├── omarchy-config/         → Stow package (mirrors ~/)
 │   ├── .config/
 │   │   ├── hypr/           → Hyprland window manager
+│   │   │   ├── bindings.conf   → Keybindings
+│   │   │   └── autostart.conf  → Startup applications
 │   │   ├── waybar/         → Status bar
 │   │   ├── ghostty/        → Terminal emulator
 │   │   ├── walker/         → Application launcher
 │   │   ├── uwsm/           → Session manager (EDITOR, BROWSER)
 │   │   └── starship.toml   → Shell prompt theme
-│   ├── .bashrc             → Bash configuration
+│   ├── .bashrc             → Bash configuration (aliases, PATH)
 │   └── .XCompose           → Custom keyboard input
-└── README-apps.md          → Package reference
+├── README-apps.md          → Package reference
+└── README-keybindings.md   → Keybindings & aliases reference
 ```
 
 ## Development Patterns & Constraints
