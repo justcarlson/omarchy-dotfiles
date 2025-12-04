@@ -3,8 +3,8 @@
 # Install other terminals via Install > Terminal
 export TERMINAL=ghostty
 
-# Use code for VSCode
-export EDITOR=code
+# Use cursor for Cursor IDE
+export EDITOR=cursor
 
 # Google Chrome Beta
 export BROWSER=google-chrome-beta

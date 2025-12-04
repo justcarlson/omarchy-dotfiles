@@ -8,7 +8,8 @@ These are offered during `./install.sh`:
 
 | Package | Purpose | Config Reference |
 |---------|---------|------------------|
-| visual-studio-code-bin | Code editor | `EDITOR=code` in uwsm/default |
+| cursor-bin | Code editor | `EDITOR=cursor` in uwsm/default |
+| cursor-cli | Cursor CLI tools | CLI |
 | google-chrome-beta | Web browser | `BROWSER` in uwsm/default |
 | tailscale | Mesh VPN | Remote access |
 | solaar | Logitech device manager | For MX mice/keyboards |

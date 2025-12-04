@@ -14,7 +14,7 @@ OMARCHY_OTHER=$(curl -s https://raw.githubusercontent.com/basecamp/omarchy/maste
 OMARCHY_ALL=$(echo -e "$OMARCHY_BASE\n$OMARCHY_OTHER" | grep -v '^#' | grep -v '^$' | sort -u)
 
 # Packages already in your install.sh OPTIONAL_PACKAGES
-DOTFILES_PACKAGES="visual-studio-code-bin google-chrome-beta tailscale solaar python-pipx tree bun-bin claude-code wev wget"
+DOTFILES_PACKAGES="cursor-bin cursor-cli google-chrome-beta tailscale solaar python-pipx tree bun-bin claude-code wev wget"
 
 # Get explicitly installed packages
 INSTALLED=$(pacman -Qeq | sort)

@@ -30,7 +30,8 @@ echo ""
 # Packages not pre-installed on Omarchy but referenced in configs
 # Format: "package|category|description"
 OPTIONAL_PACKAGES=(
-    "visual-studio-code-bin|Editor|Default editor (EDITOR=code)"
+    "cursor-bin|Editor|Default editor (EDITOR=cursor)"
+    "cursor-cli|Editor|Cursor CLI tools"
     "google-chrome-beta|Browser|Default browser (BROWSER)"
     "tailscale|Networking|Mesh VPN"
     "solaar|Utilities|Logitech device manager"
