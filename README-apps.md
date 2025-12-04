@@ -34,6 +34,14 @@ These are included in Omarchy's base packages and referenced in bindings.conf:
 | 1password-beta | Password manager | Super+Shift+/ |
 | nautilus | File manager | Super+Shift+F |
 
+## Installed via curl (automatic)
+
+Factory CLI is installed automatically during `./install.sh`:
+
+| Package | Purpose | Install Command |
+|---------|---------|-----------------|
+| Factory CLI | Factory AI CLI | `curl -fsSL https://app.factory.ai/cli \| sh` |
+
 ## Installed via pipx
 
 These are offered during `./install.sh` after the yay packages. `python-pipx` is auto-installed if needed:

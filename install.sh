@@ -220,6 +220,19 @@ if stow omarchy-config; then
     echo "⚠️  You may need to restart Hyprland or reboot for all changes to take effect."
     echo ""
 
+    # Install Factory CLI
+    echo "--------------------------------------"
+    echo "  Installing Factory CLI"
+    echo "--------------------------------------"
+    echo ""
+    if curl -fsSL https://app.factory.ai/cli | sh; then
+        echo "✅ Factory CLI installed successfully"
+    else
+        echo "⚠️  Factory CLI installation failed"
+        echo "   Try manually: curl -fsSL https://app.factory.ai/cli | sh"
+    fi
+    echo ""
+
     # Prompt for optional app installation
     echo "--------------------------------------"
     echo "  Optional: Install Additional Apps"
