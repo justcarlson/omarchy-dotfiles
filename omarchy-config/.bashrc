@@ -9,6 +9,7 @@ source ~/.local/share/omarchy/default/bash/rc
 #
 # Make an alias for invoking commands you use constantly
 # alias p='python'
+alias code='cursor'
 export PATH="$HOME/.local/bin:$PATH"
 
 # 1Password SSH agent
