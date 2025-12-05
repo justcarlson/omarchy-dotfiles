@@ -25,6 +25,9 @@ Personal dotfiles repository for Omarchy Linux (Arch-based with Hyprland window 
 │   │   ├── walker/         → Application launcher
 │   │   ├── uwsm/           → Session manager (EDITOR, BROWSER)
 │   │   └── starship.toml   → Shell prompt theme
+│   ├── .local/bin/
+│   │   ├── droid-scripts/  → Wrapper scripts for Factory CLI (droid)
+│   │   └── cursor-wayland  → Cursor IDE Wayland launcher
 │   ├── .bashrc             → Bash configuration (aliases, PATH)
 │   └── .XCompose           → Custom keyboard input
 ├── README-apps.md          → Package reference
