@@ -80,6 +80,7 @@ stow --adopt omarchy-config
 - **Ghostty** - Terminal
 - **uwsm** - Session manager
 - **Starship** - Shell prompt
+- **Typora** - Markdown editor themes
 - **.bashrc and .XCompose** - Shell and input configs
 
 ## Documentation

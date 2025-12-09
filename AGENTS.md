@@ -24,6 +24,7 @@ Personal dotfiles repository for Omarchy Linux (Arch-based with Hyprland window 
 │   │   ├── ghostty/        → Terminal emulator
 │   │   ├── walker/         → Application launcher
 │   │   ├── uwsm/           → Session manager (EDITOR, BROWSER)
+│   │   ├── Typora/themes/  → Markdown editor themes
 │   │   └── starship.toml   → Shell prompt theme
 │   ├── .local/bin/
 │   │   ├── droid-scripts/  → Wrapper scripts for Factory CLI (droid)
