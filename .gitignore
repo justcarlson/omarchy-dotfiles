@@ -1,1 +1,2 @@
-omarchy-config/.config/ghostty/*.bak
+# Large binaries - install these via package manager instead
+omarchy-config/.local/bin/droid

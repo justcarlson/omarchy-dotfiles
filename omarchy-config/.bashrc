@@ -30,3 +30,6 @@ alias d-r='droid --resume'
 
 # Created by `pipx` on 2025-11-29 19:23:05
 export PATH="$PATH:/home/justincarlson/.local/bin"
+
+# Created by `pipx` on 2025-12-08 17:46:40
+export PATH="$PATH:/home/justincarlson/.dotfiles/omarchy-config/.local/bin"
