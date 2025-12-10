@@ -1,62 +1,77 @@
 # Hyprland Configuration
 
-## Autostart Commands
+Personal Hyprland config for Omarchy Linux. Uses Hy3 plugin for i3-like tiling.
 
-Hyprland's `exec-once` does not use a shell to parse commands. Arguments are passed literally, which breaks commands with flags like `droid -m model-name`.
+## Key Files
 
-### Adding commands with arguments
+- `hyprland.conf` - Main config, sources all others
+- `hy3.conf` - Hy3 plugin settings + keybind overrides
+- `bindings.conf` - Personal app launch keybindings
+- `autostart.conf` - Startup applications + Droid sessions
+- `monitors.conf` - Display configuration
 
-**Wrong** - arguments get mangled:
+## Tech Stack
+
+- **Hyprland** - Wayland compositor
+- **Hy3 plugin** - i3/sway-like manual tiling (via hyprpm)
+- **uwsm** - Session manager for app launching
+- **Ghostty** - Terminal emulator
+
+## Commands
+
+```bash
+# Reload config (no restart needed)
+hyprctl reload
+
+# Check for config errors
+hyprland --config ~/.config/hypr/hyprland.conf --check
+
+# Plugin management
+hyprpm list                    # List installed plugins
+hyprpm update                  # Update headers + plugins
+hyprpm enable hy3              # Enable Hy3 after install
 ```
-exec-once = uwsm-app -- xdg-terminal-exec -e bash -c 'droid -m claude-opus-4-5-20251101'
+
+## Boundaries
+
+- ✅ **Always:** Test with `hyprctl reload` after changes
+- ⚠️ **Ask first:** Modifying default Omarchy bindings (they live in `~/.local/share/omarchy/`)
+- 🚫 **Never:** Edit files in `~/.local/share/omarchy/` - override in personal configs instead
+
+## Patterns
+
+**Override default bindings:**
+```ini
+unbind = SUPER, KEY           # Remove default
+bindd = SUPER, KEY, Desc, dispatcher, args
 ```
 
-**Correct** - use a wrapper script:
+**Autostart with window rules:**
+```ini
+exec-once = [workspace 1] uwsm-app -- app-name
 ```
-exec-once = uwsm-app -- xdg-terminal-exec -e ~/.local/bin/droid-scripts/droid-opus
+
+**Source order matters** - later sources override earlier ones.
+
+## Autostart Gotchas
+
+Hyprland's `exec-once` passes arguments literally. For complex commands, use wrapper scripts:
+
+```ini
+# Wrong - arguments get mangled
+exec-once = uwsm-app -- xdg-terminal-exec -e droid -m model
+
+# Correct - use wrapper script or shell
+exec-once = uwsm-app -- ghostty -e bash -c 'droid; exec $SHELL'
 ```
 
-### Creating wrapper scripts
+## Factory CLI (droid) Quick Reference
 
-1. Add script to `omarchy-config/.local/bin/droid-scripts/`
-2. Make it executable: `chmod +x script-name`
-3. Run `stow omarchy-config` to symlink
-4. Reference full path in autostart.conf: `~/.local/bin/droid-scripts/script-name`
-
-### Command patterns
-
-- GUI apps: `exec-once = uwsm-app -- app-name`
-- Terminal apps: `exec-once = uwsm-app -- xdg-terminal-exec -e command`
-- Silent/workspace: `exec-once = [workspace 1 silent] app-name`
-
-## Factory CLI (droid) Reference
-
-Run `droid --help` and `droid exec --help` to verify available flags.
-
-### Interactive mode (`droid`)
-
-Only these options exist:
-- `droid` - start interactive mode
-- `droid "prompt"` - start with initial context
-- `droid --resume [sessionId]` - resume session
-- `-v, --version` / `-h, --help`
-
-**No `-m` or `--model` flag** - model selection is NOT available in interactive mode.
-
-### Exec mode (`droid exec`)
-
-Supports full options including:
-- `-m, --model <id>` - select model
-- `--auto <level>` - autonomy level (low/medium/high)
-- `--skip-permissions-unsafe` - bypass permission checks
-- `-s, --session-id <id>` - continue existing session
-
-### Common mistakes
-
-```conf
-# WRONG - --use-spec doesn't exist, -m not valid for interactive
-bindd = SUPER SHIFT ALT, A, Factory CLI, exec, $terminal -e droid --use-spec -m claude-opus
-
-# CORRECT - plain droid for interactive mode
-bindd = SUPER SHIFT ALT, A, Factory CLI, exec, $terminal -e droid
+```bash
+droid                    # Interactive mode (no model flag)
+droid "prompt"           # Start with context
+droid --resume           # Resume last session
+droid exec -m model      # Exec mode supports -m flag
 ```
+
+**Note:** Model selection (`-m`) only works in `droid exec`, not interactive mode.

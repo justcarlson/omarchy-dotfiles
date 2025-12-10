@@ -27,6 +27,14 @@ fi
 
 echo ""
 
+# Build dependencies required for hyprpm (Hyprland Plugin Manager)
+# These are needed to compile plugins like Hy3
+HYPRPM_BUILD_DEPS=(
+    "meson"
+    "cmake"
+    "cpio"
+)
+
 # Packages not pre-installed on Omarchy but referenced in configs
 # Format: "package|category|description"
 # Note: Cursor is installed via AppImage, not AUR - see README-apps.md
@@ -234,6 +242,96 @@ if stow omarchy-config; then
         echo ""
     fi
     echo "⚠️  You may need to restart Hyprland or reboot for all changes to take effect."
+    echo ""
+
+    # Install Hy3 Hyprland Plugin (i3/sway-like tiling)
+    echo "--------------------------------------"
+    echo "  Installing Hy3 Tiling Plugin"
+    echo "--------------------------------------"
+    echo ""
+    echo "Hy3 provides i3/sway-like manual tiling for Hyprland."
+    echo "This requires build dependencies and hyprpm setup."
+    echo ""
+    read -p "Install Hy3 plugin? [Y/n]: " -n 1 -r hy3_choice
+    echo ""
+
+    if [[ ! "${hy3_choice,,}" == "n" ]]; then
+        echo ""
+        echo "📦 Installing hyprpm build dependencies..."
+        
+        # Install build deps
+        missing_deps=()
+        for dep in "${HYPRPM_BUILD_DEPS[@]}"; do
+            if ! pacman -Qi "$dep" &>/dev/null; then
+                missing_deps+=("$dep")
+            fi
+        done
+
+        if [ ${#missing_deps[@]} -gt 0 ]; then
+            echo "   Installing: ${missing_deps[*]}"
+            if yay -S --noconfirm "${missing_deps[@]}" &>/dev/null; then
+                echo "✅ Build dependencies installed"
+            else
+                echo "❌ Failed to install build dependencies"
+                echo "   Try manually: yay -S ${missing_deps[*]}"
+            fi
+        else
+            echo "✅ Build dependencies already installed"
+        fi
+
+        echo ""
+        echo "🔧 Setting up hyprpm (this may take a minute)..."
+        
+        if hyprpm update 2>&1 | grep -v "^$"; then
+            echo "✅ hyprpm headers updated"
+        else
+            echo "⚠️  hyprpm update had issues (may be OK if already configured)"
+        fi
+
+        echo ""
+        echo "📦 Installing Hy3 plugin..."
+        
+        # Check if hy3 is already added
+        if hyprpm list 2>/dev/null | grep -q "hy3"; then
+            echo "✅ Hy3 already installed"
+        else
+            # Add hy3 repo (auto-accept with yes)
+            if echo "y" | hyprpm add https://github.com/outfoxxed/hy3 2>&1 | grep -v "^$"; then
+                echo "✅ Hy3 plugin added"
+            else
+                echo "❌ Failed to add Hy3 plugin"
+                echo "   Try manually: hyprpm add https://github.com/outfoxxed/hy3"
+            fi
+        fi
+
+        # Enable hy3
+        if hyprpm enable hy3 2>&1 | grep -v "^$"; then
+            echo "✅ Hy3 enabled"
+        else
+            echo "⚠️  Hy3 enable had issues"
+        fi
+
+        echo ""
+        echo "✅ Hy3 setup complete!"
+        echo "   Restart Hyprland for changes to take effect."
+        echo ""
+    else
+        echo "Skipping Hy3 installation."
+        echo "You can install later with:"
+        echo "   yay -S meson cmake cpio"
+        echo "   hyprpm update"
+        echo "   hyprpm add https://github.com/outfoxxed/hy3"
+        echo "   hyprpm enable hy3"
+        echo ""
+        
+        # Comment out hy3.conf sourcing if user skips
+        HY3_CONF="$HOME/.config/hypr/hyprland.conf"
+        if [ -f "$HY3_CONF" ] && grep -q "^source = ~/.config/hypr/hy3.conf" "$HY3_CONF"; then
+            sed -i 's|^source = ~/.config/hypr/hy3.conf|# source = ~/.config/hypr/hy3.conf  # Uncomment after installing Hy3|' "$HY3_CONF"
+            echo "ℹ️  Commented out hy3.conf in hyprland.conf (enable after installing Hy3)"
+        fi
+    fi
+
     echo ""
 
     # Install Factory CLI
