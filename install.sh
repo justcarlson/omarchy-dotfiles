@@ -367,6 +367,63 @@ if stow omarchy-config; then
     fi
     echo ""
 
+    # Install Claude Code
+    echo "--------------------------------------"
+    echo "  Optional: Install Claude Code"
+    echo "--------------------------------------"
+    echo ""
+    echo "Claude Code is Anthropic's agentic coding tool for the terminal."
+    echo ""
+    read -p "Install Claude Code? [Y/n]: " -n 1 -r claude_choice
+    echo ""
+
+    if [[ ! "${claude_choice,,}" == "n" ]]; then
+        # Check for npm
+        if ! command -v npm &>/dev/null; then
+            echo "📦 npm not found. Installing nodejs..."
+            if yay -S --noconfirm nodejs npm; then
+                echo "✅ nodejs/npm installed"
+            else
+                echo "❌ Failed to install nodejs/npm"
+                echo "   Install manually: yay -S nodejs npm"
+                echo "   Then run: npm install -g @anthropic-ai/claude-code"
+            fi
+        fi
+
+        if command -v npm &>/dev/null; then
+            echo "📦 Installing Claude Code..."
+            if npm install -g @anthropic-ai/claude-code; then
+                echo "✅ Claude Code installed successfully"
+                echo ""
+                echo "Run 'claude' to start and authenticate."
+                echo ""
+
+                # Prompt for status line setup
+                read -p "Configure custom status line (git info + context %)? [Y/n]: " -n 1 -r statusline_choice
+                echo ""
+
+                if [[ ! "${statusline_choice,,}" == "n" ]]; then
+                    if [ -x "$HOME/.local/bin/setup-claude-code-statusline.sh" ]; then
+                        bash "$HOME/.local/bin/setup-claude-code-statusline.sh"
+                    else
+                        echo "⚠️  Status line script not found"
+                        echo "   Run manually after stow: ~/.local/bin/setup-claude-code-statusline.sh"
+                    fi
+                else
+                    echo "Skipping status line setup."
+                    echo "Run later: ~/.local/bin/setup-claude-code-statusline.sh"
+                fi
+            else
+                echo "❌ Claude Code installation failed"
+                echo "   Try manually: npm install -g @anthropic-ai/claude-code"
+            fi
+        fi
+    else
+        echo "Skipping Claude Code. Install later with:"
+        echo "   npm install -g @anthropic-ai/claude-code"
+    fi
+    echo ""
+
     # Prompt for optional app installation
     echo "--------------------------------------"
     echo "  Optional: Install Additional Apps"
@@ -491,7 +548,7 @@ if stow omarchy-config; then
     echo "These configs are stored locally (not in git) to protect your API keys."
     echo ""
 
-    read -p "Configure MCP servers for Factory CLI and Cursor? [Y/n]: " -n 1 -r mcp_choice
+    read -p "Configure MCP servers for Factory CLI, Cursor, and Claude Code? [Y/n]: " -n 1 -r mcp_choice
     echo ""
 
     if [[ ! "${mcp_choice,,}" == "n" ]]; then
@@ -499,7 +556,7 @@ if stow omarchy-config; then
         read -p "Ref API key (get one at https://ref.tools): " ref_key
 
         if [ -n "$exa_key" ] || [ -n "$ref_key" ]; then
-            # Build MCP config JSON
+            # Build MCP config JSON for Factory and Cursor
             MCP_CONFIG='{"mcpServers":{'
             first=true
 
@@ -515,7 +572,7 @@ if stow omarchy-config; then
 
             MCP_CONFIG+='}}'
 
-            # Create directories and write configs
+            # Create directories and write configs for Factory and Cursor
             mkdir -p "$HOME/.factory" "$HOME/.cursor"
             echo "$MCP_CONFIG" > "$HOME/.factory/mcp.json"
             echo "$MCP_CONFIG" > "$HOME/.cursor/mcp.json"
@@ -524,6 +581,40 @@ if stow omarchy-config; then
             echo "✅ MCP configs created:"
             echo "   ~/.factory/mcp.json"
             echo "   ~/.cursor/mcp.json"
+
+            # Configure Claude Code MCP servers if claude is installed
+            if command -v claude &>/dev/null; then
+                echo ""
+                echo "📦 Configuring Claude Code MCP servers..."
+
+                if [ -n "$exa_key" ]; then
+                    if claude mcp add exa --transport http "https://mcp.exa.ai/mcp?exaApiKey=$exa_key" --scope user 2>/dev/null; then
+                        echo "   ✓ Added exa MCP server"
+                    else
+                        echo "   ⚠️  Failed to add exa MCP server"
+                    fi
+                fi
+
+                if [ -n "$ref_key" ]; then
+                    if claude mcp add Ref --transport http "https://api.ref.tools/mcp?apiKey=$ref_key" --scope user 2>/dev/null; then
+                        echo "   ✓ Added Ref MCP server"
+                    else
+                        echo "   ⚠️  Failed to add Ref MCP server"
+                    fi
+                fi
+
+                echo "✅ Claude Code MCP servers configured"
+            else
+                echo ""
+                echo "ℹ️  Claude Code not installed - skipping Claude Code MCP config"
+                echo "   After installing Claude Code, run:"
+                if [ -n "$exa_key" ]; then
+                    echo "   claude mcp add exa --transport http 'https://mcp.exa.ai/mcp?exaApiKey=YOUR_KEY' --scope user"
+                fi
+                if [ -n "$ref_key" ]; then
+                    echo "   claude mcp add Ref --transport http 'https://api.ref.tools/mcp?apiKey=YOUR_KEY' --scope user"
+                fi
+            fi
         else
             echo "No API keys provided. Skipping MCP configuration."
         fi
