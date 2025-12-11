@@ -61,6 +61,7 @@ declare -A AUTOSTART_MAP=(
 # Map package names to post-install commands
 declare -A POST_INSTALL_MAP=(
     ["yazi"]="xdg-mime default yazi.desktop inode/directory"
+    ["google-chrome-beta"]="xdg-settings set default-web-browser google-chrome-beta.desktop"
 )
 
 # Display available packages

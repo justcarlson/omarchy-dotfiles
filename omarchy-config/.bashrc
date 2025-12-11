@@ -16,17 +16,17 @@ export PATH="$HOME/.local/bin:$PATH"
 # 1Password SSH agent
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 
-# Factory CLI aliases
-# Exec mode (non-interactive) - supports -m for model selection
-alias d-skip='droid exec --skip-permissions-unsafe'
-alias d-yolo='droid exec --skip-permissions-unsafe'
-alias d-yolo-o='droid exec --skip-permissions-unsafe -m claude-opus-4-5-20251101'
-alias d-yolo-s='droid exec --skip-permissions-unsafe -m claude-sonnet-4-5-20250929'
-alias d-yolo-h='droid exec --skip-permissions-unsafe -m claude-haiku-4-5-20251001'
-
-# Interactive mode - only supports --resume
-alias d-resume='droid --resume'
-alias d-r='droid --resume'
+# Claude Code aliases
+alias c-yolo='claude --dangerously-skip-permissions'
+alias c-yolo-o='claude --dangerously-skip-permissions --model opus'
+alias c-yolo-s='claude --dangerously-skip-permissions --model sonnet'
+alias c-yolo-h='claude --dangerously-skip-permissions --model haiku'
+alias c-continue='claude --continue'
+alias c-c='claude --continue'
+alias c-resume='claude --resume'
+alias c-r='claude --resume'
+alias c-print='claude --print'
+alias c-p='claude --print'
 
 # Created by `pipx` on 2025-11-29 19:23:05
 export PATH="$PATH:/home/justincarlson/.local/bin"
