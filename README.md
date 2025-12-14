@@ -1,16 +1,21 @@
 # Omarchy Dotfiles
 
-Justin's dotfiles and configuration for Omarchy Linux (Arch-based with Hyprland).
+Personal dotfiles for [Omarchy Linux](https://omarchy.com) — Arch + Hyprland on Apple T2 MacBooks.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Hyprland + Hy3  │  Ghostty  │  Starship  │  GNU Stow      │
+└─────────────────────────────────────────────────────────────┘
+```
 
 <details>
-<summary><strong>Prerequisites (1Password SSH)</strong></summary>
+<summary>Prerequisites (1Password SSH)</summary>
 
-This repo requires SSH authentication. Configure 1Password SSH agent first:
+Configure 1Password SSH agent for GitHub authentication:
 
-1. Open 1Password > Settings > Developer
-2. Enable "Use the SSH agent"
-3. Add your GitHub SSH key to 1Password
-4. Create/update `~/.ssh/config`:
+1. 1Password → Settings → Developer → Enable "Use the SSH agent"
+2. Add your GitHub SSH key to 1Password
+3. Add to `~/.ssh/config`:
    ```
    Host github.com
      IdentityAgent ~/.1password/agent.sock
@@ -26,159 +31,128 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
-The installer backs up existing configs, creates symlinks via GNU Stow, and offers optional packages.
+The installer will:
+- ✓ Back up existing configs
+- ✓ Create symlinks via GNU Stow
+- ✓ Offer Hy3 plugin & Claude Code
+- ✓ Let you pick optional packages
+- ✓ Configure API keys for MCP
 
-**CLI Options:**
-```bash
-./install.sh --check          # Dry run - preview changes
-./install.sh --skip-packages  # Skip optional package selection
-./install.sh --skip-secrets   # Skip API key configuration
-```
+**Options:**
+| Flag | Effect |
+|------|--------|
+| `--check` | Dry run — preview without changes |
+| `--skip-packages` | Skip optional package selection |
+| `--skip-secrets` | Skip API key configuration |
 
-> **Note:** Do NOT use `sudo` - the script doesn't need it.
+> No `sudo` needed — the script runs as your user.
 
 <details>
-<summary><strong>Resolving Stow Conflicts</strong></summary>
+<summary>Stow Conflicts</summary>
 
-If the install script fails with "cannot stow" errors, you have existing configs that need to be moved first:
+If you see "cannot stow" errors, back up existing configs first:
 
-**Option 1: Manual backup** (recommended for clean install)
 ```bash
 mkdir -p ~/omarchy-backup-manual
-mv ~/.config/hypr ~/omarchy-backup-manual/
-mv ~/.config/waybar ~/omarchy-backup-manual/
-mv ~/.config/walker ~/omarchy-backup-manual/
-mv ~/.config/ghostty ~/omarchy-backup-manual/
-mv ~/.config/uwsm ~/omarchy-backup-manual/
-mv ~/.config/starship.toml ~/omarchy-backup-manual/
-mv ~/.bashrc ~/omarchy-backup-manual/
-mv ~/.XCompose ~/omarchy-backup-manual/
-
+mv ~/.config/hypr ~/.config/waybar ~/.config/walker \
+   ~/.config/ghostty ~/.config/uwsm ~/.config/starship.toml \
+   ~/.bashrc ~/.XCompose ~/omarchy-backup-manual/
 ./install.sh
 ```
 
-**Option 2: Adopt existing configs** (merges your current configs into the repo)
-```bash
-cd ~/.dotfiles
-stow --adopt omarchy-config
-```
+Or adopt existing configs into the repo: `stow --adopt omarchy-config`
 
 </details>
 
 <details>
-<summary><strong>Troubleshooting</strong></summary>
+<summary>Troubleshooting</summary>
 
-**"Permission denied" when running scripts:**
-```bash
-chmod +x install.sh
-```
-
-**"command not found" with sudo:**
-Don't use sudo. Run scripts as your regular user.
-
-**Stow conflicts:**
-See "Resolving Stow Conflicts" section above.
-
-**Installation failed mid-way:**
-The installer automatically rolls back if stow fails. Your original configs are preserved in `~/omarchy-backup-*/`. To manually restore:
-```bash
-cd ~/.dotfiles
-stow -D omarchy-config
-cp -r ~/omarchy-backup-TIMESTAMP/.config/hypr ~/.config/
-```
+| Problem | Solution |
+|---------|----------|
+| Permission denied | `chmod +x install.sh` |
+| Command not found (sudo) | Don't use sudo |
+| Stow conflicts | See above |
+| Install failed mid-way | Auto-rollback preserves `~/omarchy-backup-*/` |
 
 </details>
 
-## What's Included
+---
 
-| Path | Description |
-|------|-------------|
-| `omarchy-config/` | Dotfiles (Hyprland, Waybar, Ghostty, Walker, etc.) |
-| `lib/` | Modular libraries (tui.sh, secrets.sh, packages.sh) |
-| `install.sh` | Main installer |
+## What's Inside
 
-**Configured apps:** Hyprland, Waybar, Walker, Ghostty, uwsm, Starship, Typora themes
+```
+~/.dotfiles/
+├── install.sh           # Interactive installer
+├── lib/
+│   ├── tui.sh           # Gum-powered UI
+│   ├── secrets.sh       # ~/.secrets management
+│   └── packages.sh      # Package registry
+└── omarchy-config/      # Stow package → ~/
+    ├── .config/hypr/    # Hyprland + Hy3
+    ├── .config/ghostty/ # Terminal
+    ├── .config/waybar/  # Status bar
+    └── .bashrc          # Shell
+```
 
-## Customization
+## Customize
 
-After installation, edit:
-- `~/.config/hypr/bindings.conf` - Keybindings
-- `~/.config/hypr/autostart-claude.conf` - Claude Code workspaces
-- `~/.secrets` - API keys for MCP integrations
+Edit these after install:
 
-## Updating
+| File | Purpose |
+|------|---------|
+| `~/.config/hypr/bindings.conf` | Keybindings |
+| `~/.config/hypr/autostart-claude.conf` | Claude Code workspaces |
+| `~/.secrets` | API keys (MCP integrations) |
 
-Since Stow creates symlinks, edits in `~/.config/` automatically update the repo.
+## Update
+
+Symlinks mean edits in `~/.config/` update the repo automatically.
 
 ```bash
-cd ~/.dotfiles && git pull   # Pull latest (changes apply immediately)
+cd ~/.dotfiles && git pull   # Changes apply immediately
 ```
 
 <details>
-<summary><strong>Git Workflow (PRs & Branches)</strong></summary>
+<summary>Git Workflow</summary>
 
-1. Create a feature branch:
-   ```bash
-   cd ~/.dotfiles
-   git checkout main && git pull
-   git checkout -b feature/description
-   ```
-
-2. Make your config changes (they're symlinked, so edit directly in `~/.config/`)
-
-3. Commit and push:
-   ```bash
-   git add -A
-   git commit -m "feat: description"
-   git push -u origin feature/description
-   gh pr create --fill
-   ```
-
-4. After PR merge, clean up:
-   ```bash
-   git checkout main && git pull
-   git branch -d feature/description
-   ```
-
-</details>
-
-<details>
-<summary><strong>Version Tags & Rollback</strong></summary>
-
-**Roll back to a previous version:**
 ```bash
-cd ~/.dotfiles
-git checkout v2.0.0
-stow -R omarchy-config
-```
+# Feature branch
+git checkout -b feature/thing
+# ... make changes in ~/.config/ ...
+git add -A && git commit -m "feat: thing"
+git push -u origin feature/thing
+gh pr create --fill
 
-**Return to latest:**
-```bash
-cd ~/.dotfiles
+# After merge
 git checkout main && git pull
-stow -R omarchy-config
+git branch -d feature/thing
 ```
-
-**Available versions:**
-- **v2.0.0** - Modular install with TUI, secrets, and package registry
-- **v1.0.0** - First stable release with Hyprland, Hy3, and core configs
 
 </details>
 
 <details>
-<summary><strong>Uninstalling</strong></summary>
+<summary>Rollback</summary>
 
-To remove the symlinks:
 ```bash
-cd ~/.dotfiles
-stow -D omarchy-config
+git checkout v2.0.0 && stow -R omarchy-config   # Roll back
+git checkout main && stow -R omarchy-config     # Return to latest
 ```
 
-Your backup configs will still be in `~/omarchy-backup-*/` if you need them.
+**Versions:** v2.0.0 (modular TUI) · v1.0.0 (initial release)
 
 </details>
 
-## Documentation
+<details>
+<summary>Uninstall</summary>
 
-- **[Keybindings](README-keybindings.md)** - Keyboard shortcuts and aliases
-- **[Packages](README-apps.md)** - Optional and pre-installed packages
+```bash
+stow -D omarchy-config   # Remove symlinks
+```
+
+Backups remain in `~/omarchy-backup-*/`
+
+</details>
+
+---
+
+**Docs:** [Keybindings](README-keybindings.md) · [Packages](README-apps.md)
