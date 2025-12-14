@@ -363,23 +363,15 @@ install_optional_packages() {
     tui_subheader "Optional Packages"
     echo ""
     
-    echo "[DEBUG install_optional_packages] Starting package availability check..." >&2
-    echo "[DEBUG install_optional_packages] PACKAGE_REGISTRY has ${#PACKAGE_REGISTRY[@]} entries" >&2
-    
     # Check what's available
     local available_count=0
     for entry in "${PACKAGE_REGISTRY[@]}"; do
         local name
         name=$(pkg_get_field "$entry" "name")
         if ! pkg_is_installed "$name"; then
-            echo "[DEBUG install_optional_packages] Available: $name" >&2
             available_count=$((available_count + 1))
-        else
-            echo "[DEBUG install_optional_packages] Already installed: $name" >&2
         fi
     done
-    
-    echo "[DEBUG install_optional_packages] Total available: $available_count" >&2
     
     if [[ $available_count -eq 0 ]]; then
         tui_success "All optional packages already installed!"
@@ -390,15 +382,11 @@ install_optional_packages() {
     pkg_display_available
     echo ""
     
-    echo "[DEBUG install_optional_packages] About to call tui_choose..." >&2
     local choice
     choice=$(tui_choose "Install all" "Select packages" "Skip")
-    echo "[DEBUG install_optional_packages] tui_choose returned: '$choice'" >&2
-    echo "[DEBUG install_optional_packages] choice length: ${#choice}" >&2
     
     # Handle empty choice explicitly
     if [[ -z "$choice" ]]; then
-        echo "[DEBUG install_optional_packages] WARNING: choice is empty!" >&2
         tui_warning "No selection made (possible gum/TTY issue). Defaulting to Skip."
         tui_muted "Skipping. Install later with: yay -S <package>"
         # Still update autostart config
@@ -408,11 +396,8 @@ install_optional_packages() {
         return 0
     fi
     
-    echo "[DEBUG install_optional_packages] Processing choice: '$choice'" >&2
-    
     case "$choice" in
         "Install all")
-            echo "[DEBUG install_optional_packages] Matched 'Install all' case" >&2
             local all_packages=()
             for entry in "${PACKAGE_REGISTRY[@]}"; do
                 local name
@@ -424,11 +409,9 @@ install_optional_packages() {
             pkg_install_many "${all_packages[@]}"
             ;;
         "Select packages")
-            echo "[DEBUG install_optional_packages] Matched 'Select packages' case" >&2
             pkg_select_interactive
             ;;
         "Skip"|*)
-            echo "[DEBUG install_optional_packages] Matched 'Skip' or default case" >&2
             tui_muted "Skipping. Install later with: yay -S <package>"
             ;;
     esac

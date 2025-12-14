@@ -256,14 +256,7 @@ tui_secret() {
 # Single selection from list
 # Usage: choice=$(tui_choose "Option 1" "Option 2" "Option 3")
 tui_choose() {
-    # Debug: Log function entry and arguments
-    echo "[DEBUG tui_choose] Called with ${#@} arguments: $*" >&2
-    echo "[DEBUG tui_choose] TTY check: stdin=$([ -t 0 ] && echo 'yes' || echo 'no'), stdout=$([ -t 1 ] && echo 'yes' || echo 'no')" >&2
-    
     if _has_gum; then
-        echo "[DEBUG tui_choose] gum detected, attempting gum choose..." >&2
-        echo "[DEBUG tui_choose] gum version: $(gum --version 2>&1)" >&2
-        
         local tmpfile result exit_code
         tmpfile=$(_tui_mktemp)
         
@@ -272,23 +265,13 @@ tui_choose() {
         exit_code=$?
         result=$(cat "$tmpfile")
         
-        echo "[DEBUG tui_choose] gum choose exit code: $exit_code" >&2
-        echo "[DEBUG tui_choose] gum choose result: '$result'" >&2
-        echo "[DEBUG tui_choose] result length: ${#result}" >&2
-        
         if [[ $exit_code -eq 0 && -n "$result" ]]; then
-            echo "[DEBUG tui_choose] Using gum result" >&2
             echo "$result"
             return 0
         fi
-        
-        echo "[DEBUG tui_choose] gum failed or empty, falling back to text prompt..." >&2
-    else
-        echo "[DEBUG tui_choose] gum not found, using text prompt" >&2
     fi
     
     # Text-based fallback (render to /dev/tty, read from /dev/tty)
-    echo "[DEBUG tui_choose] Displaying text menu..." >&2
     local i=1
     for opt in "$@"; do
         echo "  $i. $opt" >/dev/tty
@@ -296,13 +279,8 @@ tui_choose() {
     done
     local num
     read -p "Enter number: " num </dev/tty
-    echo "[DEBUG tui_choose] User entered: '$num'" >&2
     if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "$#" ]; then
-        local selected="${!num}"
-        echo "[DEBUG tui_choose] Returning text selection: '$selected'" >&2
-        echo "$selected"
-    else
-        echo "[DEBUG tui_choose] Invalid selection, returning empty" >&2
+        echo "${!num}"
     fi
 }
 
