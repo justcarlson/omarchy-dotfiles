@@ -1,10 +1,10 @@
 <p align="center">
-  <h1 align="center">Omarchy Dotfiles</h1>
-  <p align="center">
-    <em>Aesthetic, modular dotfiles for Arch Linux + Hyprland</em>
-    <br />
-    Optimized for Apple T2 MacBooks
-  </p>
+  <h1 align="center">Justin's Dotfiles</h1>
+  <!-- <p align="center"> -->
+    <!-- <em>Aesthetic, modular dotfiles for Arch Linux + Hyprland</em> -->
+    <!-- <br /> -->
+    <!-- Optimized for Apple T2 MacBooks -->
+  <!-- </p> -->
 </p>
 
 <p align="center">
