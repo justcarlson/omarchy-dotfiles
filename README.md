@@ -31,7 +31,6 @@
 ```bash
 git clone git@github.com:justcarlson/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-git checkout dev
 ./install.sh
 ```
 
