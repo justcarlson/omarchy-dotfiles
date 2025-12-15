@@ -428,6 +428,50 @@ install_optional_packages() {
     tui_success "autostart-apps.conf updated"
 }
 
+enable_tailscale() {
+    # Only proceed if tailscale package is installed
+    if ! command -v tailscale &>/dev/null; then
+        return 0
+    fi
+    
+    # Check if already enabled
+    if systemctl is-enabled tailscaled &>/dev/null 2>&1; then
+        tui_success "Tailscale daemon already enabled"
+        return 0
+    fi
+    
+    # Dry run check
+    if [[ "$DRY_RUN" == "true" ]]; then
+        tui_info "[DRY RUN] Would prompt to enable tailscaled service"
+        return 0
+    fi
+    
+    # CI/non-interactive check - skip with message (default: no)
+    if _is_ci || ! _has_tty; then
+        tui_muted "Skipping tailscaled enablement (non-interactive)"
+        tui_muted "Enable manually: sudo systemctl enable tailscaled"
+        return 0
+    fi
+    
+    # Interactive prompt
+    echo ""
+    tui_info "Tailscale is installed but the daemon is not enabled at boot"
+    
+    if ! tui_confirm "Enable Tailscale daemon to start on boot?"; then
+        tui_muted "Skipping. Enable later with: sudo systemctl enable tailscaled"
+        return 0
+    fi
+    
+    tui_info "Enabling Tailscale daemon..."
+    if sudo systemctl enable tailscaled 2>/dev/null; then
+        tui_success "Tailscale daemon enabled (will start on next boot)"
+        tui_muted "To connect now: sudo systemctl start tailscaled && sudo tailscale up"
+    else
+        tui_warning "Failed to enable tailscaled (may require sudo)"
+        tui_muted "Run manually: sudo systemctl enable tailscaled"
+    fi
+}
+
 configure_secrets() {
     tui_subheader "API Keys & Secrets"
     echo ""
@@ -578,6 +622,13 @@ main() {
         install_optional_packages
     fi
     echo ""
+    
+    # Step 5b: Enable Tailscale daemon if installed
+    if command -v tailscale &>/dev/null; then
+        tui_step "5b" 6 "Tailscale daemon"
+        enable_tailscale
+        echo ""
+    fi
     
     # Step 6: Secrets & MCP
     tui_step 6 6 "API keys & secrets"

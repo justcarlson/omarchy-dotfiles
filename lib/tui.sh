@@ -525,6 +525,11 @@ tui_is_dry_run() {
     [[ "${DRY_RUN:-false}" == "true" ]]
 }
 
+# Check if running in CI environment (GitHub Actions, etc.)
+_is_ci() {
+    [[ "${CI:-}" == "true" ]] || [[ -n "${GITHUB_ACTIONS:-}" ]]
+}
+
 # Execute command only if not in dry-run mode
 # Usage: tui_exec "description" command args...
 tui_exec() {
