@@ -1,10 +1,10 @@
 ---
 children:
-  - .github/AGENTS.md
-  - lib/AGENTS.md
-  - tests/AGENTS.md
-  - docs/AGENTS.md
-  - omarchy-config/AGENTS.md
+  - [AGENTS.md](.github/AGENTS.md)
+  - [AGENTS.md](lib/AGENTS.md)
+  - [AGENTS.md](tests/AGENTS.md)
+  - [AGENTS.md](docs/AGENTS.md)
+  - [AGENTS.md](omarchy-config/AGENTS.md)
 ---
 
 # Omarchy Dotfiles

@@ -1,7 +1,7 @@
 ---
-parent: ../AGENTS.md
+parent: [AGENTS.md](../AGENTS.md)
 children:
-  - .config/hypr/AGENTS.md
+  - [AGENTS.md](.config/hypr/AGENTS.md)
 ---
 
 # Omarchy Config (Stow Package)

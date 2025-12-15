@@ -1,5 +1,5 @@
 ---
-parent: ../AGENTS.md
+parent: [AGENTS.md](../AGENTS.md)
 ---
 
 # lib/ - Bash Libraries
