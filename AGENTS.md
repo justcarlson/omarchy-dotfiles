@@ -21,6 +21,10 @@ Personal dotfiles for Omarchy Linux (Arch + Hyprland). Uses GNU Stow for symlink
 ./install.sh --check          # Dry run - preview changes
 ./install.sh --skip-packages  # Skip optional package selection
 ./install.sh --skip-secrets   # Skip API key configuration
+./install.sh --debug          # Enable debug output for troubleshooting
+
+# Run tests
+./tests/run_tests.sh          # Run automated test suite
 
 # Stow operations
 stow omarchy-config           # Create symlinks
@@ -108,10 +112,13 @@ Gum wrappers with fallback to basic prompts:
 - `tui_input "Label" "placeholder"` - Text input
 - `tui_secret "Label"` - Password input
 - `tui_choose "opt1" "opt2"` - Single select
+- `tui_choose_multi "header" "opt1" "opt2"` - Multi-select (supports piped input)
+- `tui_filter "placeholder"` - Fuzzy filter from piped input
 - `tui_spin "Message..." command` - Spinner
 - `tui_success/error/warning/info "msg"` - Status messages
 - `tui_is_dry_run` - Check if running in dry-run mode
 - `tui_exec "desc" command` - Execute only if not dry-run
+- `_debug "msg"` - Debug output (enabled by `OMARCHY_DEBUG=1` or `--debug`)
 
 ### lib/secrets.sh
 Manages `~/.secrets` file:

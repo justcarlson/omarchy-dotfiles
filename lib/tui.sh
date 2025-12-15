@@ -14,10 +14,42 @@ export TUI_COLOR_MUTED="242"        # Gray - secondary text
 export TUI_COLOR_BORDER="99"        # Purple - borders
 
 # =============================================================================
+# Debug Output (enabled by OMARCHY_DEBUG=1 or --debug flag)
+# =============================================================================
+_debug() {
+    if [[ "${OMARCHY_DEBUG:-}" == "1" ]]; then
+        echo "[DEBUG tui] $*" >&2
+    fi
+    return 0  # Always succeed to avoid set -e issues
+}
+
+# =============================================================================
 # Gum Detection & Fallback
 # =============================================================================
 _has_gum() {
     command -v gum &>/dev/null
+}
+
+# Check if /dev/tty is available for interactive input
+_has_tty() {
+    # First check if /dev/tty exists as a character device
+    [[ -c /dev/tty ]] || return 1
+    # Then try to read from it (silently)
+    ( : </dev/tty ) 2>/dev/null
+}
+
+# Check gum version (0.14+ recommended for reliable TTY handling)
+_gum_version_ok() {
+    local version
+    version=$(gum --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1)
+    if [[ -z "$version" ]]; then
+        return 1
+    fi
+    local major minor
+    major="${version%%.*}"
+    minor="${version#*.}"
+    # Version 0.14+ is recommended
+    [[ "$major" -gt 0 ]] || [[ "$major" -eq 0 && "$minor" -ge 14 ]]
 }
 
 # =============================================================================
@@ -45,6 +77,9 @@ _tui_mktemp() {
 # Install gum if missing (called once at script start)
 tui_ensure_gum() {
     if _has_gum; then
+        if ! _gum_version_ok; then
+            _debug "gum version check: 0.14+ recommended, current: $(gum --version 2>/dev/null | head -1)"
+        fi
         return 0
     fi
     
@@ -256,7 +291,14 @@ tui_secret() {
 # Single selection from list
 # Usage: choice=$(tui_choose "Option 1" "Option 2" "Option 3")
 tui_choose() {
-    if _has_gum; then
+    _debug "tui_choose called with $# args: $*"
+    
+    if [[ $# -eq 0 ]]; then
+        _debug "tui_choose: no options provided"
+        return 1
+    fi
+    
+    if _has_gum && _has_tty; then
         local tmpfile result exit_code
         tmpfile=$(_tui_mktemp)
         
@@ -265,43 +307,105 @@ tui_choose() {
         exit_code=$?
         result=$(cat "$tmpfile")
         
+        _debug "tui_choose: gum exit=$exit_code result='$result'"
+        
         if [[ $exit_code -eq 0 && -n "$result" ]]; then
             echo "$result"
             return 0
         fi
     fi
     
-    # Text-based fallback (render to /dev/tty, read from /dev/tty)
+    _debug "tui_choose: falling back to text mode"
+    
+    # Text-based fallback
     local i=1
-    for opt in "$@"; do
-        echo "  $i. $opt" >/dev/tty
-        i=$((i + 1))
-    done
-    local num
-    read -p "Enter number: " num </dev/tty
+    if _has_tty; then
+        for opt in "$@"; do
+            echo "  $i. $opt" >/dev/tty
+            i=$((i + 1))
+        done
+        local num
+        read -p "Enter number: " num </dev/tty
+    else
+        # No TTY available - print to stderr, read from stdin
+        for opt in "$@"; do
+            echo "  $i. $opt" >&2
+            i=$((i + 1))
+        done
+        local num
+        read -p "Enter number: " num
+    fi
+    
     if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "$#" ]; then
         echo "${!num}"
+        return 0
     fi
+    
+    _debug "tui_choose: invalid selection '$num'"
+    return 1
 }
 
 # Multi-selection from list
-# Usage: choices=$(tui_choose_multi "header text" "opt1" "opt2" "opt3")
+# Usage: 
+#   choices=$(tui_choose_multi "header" "opt1" "opt2")     # Arguments
+#   choices=$(printf 'opt1\nopt2' | tui_choose_multi "header")  # Piped input
 # Returns: newline-separated list of selected items
 tui_choose_multi() {
     local header="$1"
     shift
     
-    if _has_gum; then
+    _debug "tui_choose_multi called with header='$header', $# args"
+    
+    # Collect options from both piped stdin AND arguments
+    local -a options=()
+    
+    # Check if stdin has piped data (not a TTY)
+    if [[ ! -t 0 ]]; then
+        _debug "tui_choose_multi: reading from piped stdin"
+        while IFS= read -r line; do
+            [[ -n "$line" ]] && options+=("$line")
+        done
+        _debug "tui_choose_multi: read ${#options[@]} options from stdin"
+    fi
+    
+    # Also add any passed arguments
+    if [[ $# -gt 0 ]]; then
+        options+=("$@")
+        _debug "tui_choose_multi: added $# options from args"
+    fi
+    
+    if [[ ${#options[@]} -eq 0 ]]; then
+        _debug "tui_choose_multi: no options provided"
+        return 1
+    fi
+    
+    _debug "tui_choose_multi: total ${#options[@]} options"
+    
+    if _has_gum && _has_tty; then
         local tmpfile result
         tmpfile=$(_tui_mktemp)
-        gum choose --no-limit --header "$header" "$@" > "$tmpfile" </dev/tty 2>/dev/tty
+        gum choose --no-limit --header "$header" "${options[@]}" > "$tmpfile" </dev/tty 2>/dev/tty
         result=$(cat "$tmpfile")
+        _debug "tui_choose_multi: gum result='$result'"
         echo "$result"
-    else
-        # Text fallback - render to /dev/tty
+        return 0
+    fi
+    
+    _debug "tui_choose_multi: falling back to text mode"
+    
+    # Text fallback
+    local output_fd=2  # stderr by default
+    local input_source="/dev/tty"
+    
+    if _has_tty; then
+        output_fd="/dev/tty"
+        input_source="/dev/tty"
+    fi
+    
+    if _has_tty; then
         echo "$header" >/dev/tty
         local i=1
-        for opt in "$@"; do
+        for opt in "${options[@]}"; do
             echo "  $i. $opt" >/dev/tty
             i=$((i + 1))
         done
@@ -309,17 +413,27 @@ tui_choose_multi() {
         echo "Enter numbers separated by spaces (or Enter for all):" >/dev/tty
         local selection
         read -r selection </dev/tty
-        
-        if [ -z "$selection" ]; then
-            printf '%s\n' "$@"
-        else
-            for num in $selection; do
-                if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "$#" ]; then
-                    local idx=$((num))
-                    echo "${!idx}"
-                fi
-            done
-        fi
+    else
+        echo "$header" >&2
+        local i=1
+        for opt in "${options[@]}"; do
+            echo "  $i. $opt" >&2
+            i=$((i + 1))
+        done
+        echo "" >&2
+        echo "Enter numbers separated by spaces (or Enter for all):" >&2
+        local selection
+        read -r selection
+    fi
+    
+    if [[ -z "$selection" ]]; then
+        printf '%s\n' "${options[@]}"
+    else
+        for num in $selection; do
+            if [[ "$num" =~ ^[0-9]+$ ]] && [[ "$num" -ge 1 ]] && [[ "$num" -le "${#options[@]}" ]]; then
+                echo "${options[$((num-1))]}"
+            fi
+        done
     fi
 }
 
@@ -328,19 +442,40 @@ tui_choose_multi() {
 tui_filter() {
     local placeholder="${1:-Search...}"
     
-    if _has_gum; then
+    _debug "tui_filter called with placeholder='$placeholder'"
+    
+    # Capture piped input to temp file BEFORE redirecting stdin
+    local input_file
+    input_file=$(_tui_mktemp)
+    cat > "$input_file"
+    
+    if [[ ! -s "$input_file" ]]; then
+        _debug "tui_filter: no input provided"
+        return 1
+    fi
+    
+    _debug "tui_filter: captured $(wc -l < "$input_file") lines of input"
+    
+    if _has_gum && _has_tty; then
         local tmpfile result
         tmpfile=$(_tui_mktemp)
-        # Pipe stdin to gum, render UI to /dev/tty, capture result
-        gum filter --placeholder "$placeholder" > "$tmpfile" </dev/tty 2>/dev/tty
+        # Feed saved input to gum, render UI to /dev/tty, capture result
+        gum filter --placeholder "$placeholder" < "$input_file" > "$tmpfile" 2>/dev/tty
         result=$(cat "$tmpfile")
+        _debug "tui_filter: gum result='$result'"
         echo "$result"
-    else
-        # Fallback: just use choose
-        local items=()
-        while IFS= read -r line; do
-            items+=("$line")
-        done
+        return 0
+    fi
+    
+    _debug "tui_filter: falling back to tui_choose"
+    
+    # Fallback: use tui_choose with the captured input
+    local -a items=()
+    while IFS= read -r line; do
+        [[ -n "$line" ]] && items+=("$line")
+    done < "$input_file"
+    
+    if [[ ${#items[@]} -gt 0 ]]; then
         tui_choose "${items[@]}"
     fi
 }
