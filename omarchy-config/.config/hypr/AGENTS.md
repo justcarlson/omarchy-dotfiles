@@ -69,7 +69,7 @@ bindd = SUPER, KEY, Desc, dispatcher, args
 **Guarded keybinding (for optional apps):**
 ```ini
 # Shows notification with install instructions if app not found
-bindd = SUPER SHIFT, F, File manager, exec, command -v yazi &>/dev/null && $terminal -e yazi || notify-send "yazi not installed" "Install with: yay -S yazi"
+bindd = SUPER SHIFT, T, Activity, exec, command -v btop &>/dev/null && $terminal -e btop || notify-send "btop not installed" "Install with: yay -S btop"
 ```
 
 **Autostart with window rules:**

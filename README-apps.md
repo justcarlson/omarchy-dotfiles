@@ -15,7 +15,7 @@ These are offered during `./install.sh`:
 | bun-bin | JavaScript runtime | CLI |
 | wev | Wayland event viewer | Debugging keybindings |
 | wget | Network file downloader | CLI |
-| yazi | Terminal file manager | Super+Shift+F, default for directories |
+| cursor-bin | AI-first coding environment | Super+Shift+I |
 
 ## Pre-installed on Omarchy
 
@@ -32,7 +32,7 @@ These are included in Omarchy's base packages and referenced in bindings.conf:
 | ripgrep | Fast text search | CLI |
 | ghostty | Terminal | TERMINAL env |
 | 1password-beta | Password manager | Super+Shift+/ |
-| nautilus | GUI file manager | CLI (`nautilus .`) |
+| nautilus | GUI file manager | Super+Shift+F |
 
 ## CLI Coding Agents
 
@@ -43,54 +43,27 @@ Installed during `./install.sh`:
 | [OpenCode](https://github.com/sst/opencode) | Primary CLI agent (open source) | `curl -fsSL https://opencode.ai/install \| bash` |
 | [Claude Code](https://github.com/anthropics/claude-code) | Fallback CLI agent (Anthropic) | `npm i -g @anthropic-ai/claude-code` |
 
-## Installed via pipx
+## Development Tools
 
-These are offered during `./install.sh` after the yay packages. `python-pipx` is auto-installed if needed:
+| Package | Purpose | Install | Keybinding |
+|---------|---------|---------|------------|
+| cursor-bin | AI-first coding environment | `yay -S cursor-bin` | Super+Shift+I |
 
-| Package | Purpose | Install Command | Keybinding |
-|---------|---------|-----------------|------------|
-| pygpt-net | PyGPT AI assistant | `pipx install pygpt-net` | Super+Shift+I |
+Cursor is installed from the Omarchy repo. Updates come via `yay -Syu`.
 
-## Manual Installation (AppImage)
-
-Cursor is installed manually via AppImage (not from AUR). A wrapper script (`cursor-wayland`) in `~/.local/bin/` handles Wayland flags and auto-finds the latest AppImage for seamless updates.
-
-```bash
-# Download from https://www.cursor.com/downloads
-# Then install:
-chmod +x ~/Downloads/Cursor-*.AppImage
-sudo mv ~/Downloads/Cursor-*.AppImage /opt/cursor.AppImage
-
-# Extract and install icon + desktop entry:
-cd /tmp && /opt/cursor.AppImage --appimage-extract
-sudo cp squashfs-root/usr/share/icons/hicolor/256x256/apps/cursor.png /usr/share/icons/hicolor/256x256/apps/
-sudo cp squashfs-root/usr/share/icons/hicolor/128x128/apps/cursor.png /usr/share/icons/hicolor/128x128/apps/
-sudo cp squashfs-root/usr/share/icons/hicolor/512x512/apps/cursor.png /usr/share/icons/hicolor/512x512/apps/
-rm -rf squashfs-root
-
-# Create desktop entry (uses wrapper for Wayland support):
-cat << 'EOF' | sudo tee /usr/share/applications/cursor.desktop
-[Desktop Entry]
-Name=Cursor
-Comment=AI-powered code editor
-Exec=/home/justincarlson/.local/bin/cursor-wayland %F
-Icon=cursor
-Type=Application
-Categories=Development;IDE;TextEditor;
-MimeType=text/plain;inode/directory;
-StartupNotify=true
-StartupWMClass=Cursor
-EOF
+To suppress update notifications, the dotfiles include `~/.config/Cursor/User/settings.json` with:
+```json
+{
+  "update.mode": "none",
+  "update.showReleaseNotes": false,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false
+}
 ```
-
-The `cursor-wayland` wrapper script automatically:
-- Finds the latest Cursor AppImage in `/opt/`
-- Adds Wayland/Hyprland flags: `--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime`
-- Supports Cursor's built-in auto-update (new AppImages are picked up automatically)
 
 ## Manual Installation (yay)
 
-To install any other package individually:
+To install any package individually:
 ```bash
 yay -S <package-name>
 ```

@@ -18,12 +18,11 @@ These show a notification with install instructions if the app isn't installed.
 
 | Keybinding | Action | Install |
 |------------|--------|---------|
-| `Super + Shift + F` | File manager (yazi) | `yay -S yazi` |
+| `Super + Shift + F` | File manager (Nautilus) | Pre-installed |
 | `Super + Shift + T` | Activity monitor (btop) | `yay -S btop` |
 | `Super + Shift + D` | Docker (lazydocker) | `yay -S lazydocker` |
 | `Super + Shift + W` | Typora | `yay -S typora` |
-| `Super + Shift + I` | PyGPT | `yay -S pygpt-net` |
-| `Super + Shift + E` | Cursor | See README-apps.md |
+| `Super + Shift + I` | Cursor IDE | `yay -S cursor-bin` |
 
 ### Communication Apps
 
@@ -64,13 +63,6 @@ These show a notification with install instructions if the app isn't installed.
 | `Super + Shift + Ctrl + S` | Screenshot with editing (MacBook keyboard) |
 
 ## Bash Aliases
-
-### Editor
-
-| Alias | Command |
-|-------|---------|
-| `cursor` | `cursor-wayland` |
-| `code` | `cursor-wayland` |
 
 ### OpenCode (Primary CLI Agent)
 
