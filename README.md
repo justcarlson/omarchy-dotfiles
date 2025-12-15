@@ -7,7 +7,7 @@
     <a href="https://github.com/basecamp/omarchy"><img src="https://img.shields.io/badge/Omarchy-FF6B6B?style=flat&logo=linux&logoColor=white" alt="Omarchy"></a>
     <img src="https://img.shields.io/badge/Arch_Linux-1793D1?style=flat&logo=arch-linux&logoColor=white" alt="Arch Linux">
     <img src="https://img.shields.io/badge/Hyprland-58E1FF?style=flat&logo=hyprland&logoColor=black" alt="Hyprland">
-    <img src="https://img.shields.io/badge/version-3.0.0-blue?style=flat" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.2.1-blue?style=flat" alt="Version">
     <img src="https://img.shields.io/badge/license-MIT-green?style=flat" alt="License">
     <a href="docs/contributing/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
     <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
