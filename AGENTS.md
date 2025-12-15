@@ -40,6 +40,10 @@ stow --adopt omarchy-config   # Adopt existing configs
 │   ├── tui.sh              → Gum wrappers for styled UI
 │   ├── secrets.sh          → ~/.secrets management
 │   └── packages.sh         → Package registry & installer
+├── tests/                  → Test suite
+│   ├── run_tests.sh        → Test runner
+│   └── test_*.sh           → Test files
+├── .github/workflows/      → CI/CD pipelines
 ├── docs/                   → Documentation
 │   ├── README.md           → Docs index
 │   ├── contributing/       → Contribution guidelines
@@ -57,6 +61,7 @@ stow --adopt omarchy-config   # Adopt existing configs
 - ✅ **Always:** Update `CONFIGS` array in `install.sh` when adding new config paths
 - ✅ **Always:** Add new packages to `PACKAGE_REGISTRY` in `lib/packages.sh`
 - ✅ **Always:** Store secrets in `~/.secrets`, never in tracked files
+- ✅ **Always:** Ensure CI passes before merging to main
 - ⚠️ **Ask first:** Adding new package dependencies
 - 🚫 **Never:** Run `install.sh` with `sudo` - it doesn't need elevated privileges
 - 🚫 **Never:** Edit `~/.local/share/omarchy/` files - override in personal configs
@@ -145,3 +150,4 @@ Package registry and installation:
 ## Nested AGENTS.md
 
 - `omarchy-config/.config/hypr/AGENTS.md` - Hyprland/Hy3 specific guidance
+- `.github/AGENTS.md` - CI/CD workflows and branch protection
