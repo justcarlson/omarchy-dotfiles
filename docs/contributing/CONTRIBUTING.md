@@ -16,9 +16,10 @@ git checkout dev
 All changes follow this workflow:
 
 1. **Work on `dev` branch** - All changes are committed to `dev`
-2. **Create PR to `main`** - Push `dev` and create a pull request
-3. **Merge to `main`** - Merge the PR (preserving `dev` branch)
-4. **Tag releases** - Apply version tags to `main` after significant changes
+2. **Update version badge** - If releasing, update `/README.md` badge in same PR
+3. **Create PR to `main`** - Push `dev` and create a pull request
+4. **Merge to `main`** - Merge the PR (preserving `dev` branch)
+5. **Tag release** - Create version tag on `main` after merge
 
 ### Commands
 
@@ -120,8 +121,19 @@ Use this for apps that mix runtime files with config (like Cursor).
 - **Minor** (v2.1.0) - New features, backward compatible
 - **Patch** (v2.1.1) - Bug fixes, documentation updates
 
-When tagging a new version, update the version badge in `/README.md`:
+### Workflow
 
-```html
-<img src="https://img.shields.io/badge/version-X.Y.Z-blue?style=flat" alt="Version">
-```
+1. Update the version badge in `/README.md` as part of your feature PR:
+   ```html
+   <img src="https://img.shields.io/badge/version-X.Y.Z-blue?style=flat" alt="Version">
+   ```
+2. Merge PR to `main`
+3. Tag the release on `main`:
+   ```bash
+   git checkout main && git pull origin main
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   git checkout dev
+   ```
+
+This ensures the tag includes the correct version badge and avoids extra PRs.

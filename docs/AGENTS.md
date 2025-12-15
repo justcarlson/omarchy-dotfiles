@@ -17,6 +17,8 @@ Contribution and reference documentation for the Omarchy dotfiles project.
 
 Commit conventions: `Add` | `Fix` | `Update` | `Remove` | `docs:` | `chore:`
 
+**Version releases:** Include badge update in PR, then tag after merge.
+
 ## Boundaries
 
 - **Always:** Update docs when changing related code
