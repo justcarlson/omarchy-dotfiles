@@ -31,6 +31,7 @@ parent: [AGENTS.md](../AGENTS.md)
 
 - `dev` — Commit here, CI runs on push
 - `main` — Stable, receives PRs from `dev`, version tags (vX.Y.Z) applied here
+- Update /README.md version badge to match new version tag
 - Never push directly to `main`
 
 ## Local Validation

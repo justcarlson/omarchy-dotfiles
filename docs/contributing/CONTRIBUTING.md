@@ -119,3 +119,9 @@ Use this for apps that mix runtime files with config (like Cursor).
 - **Major** (v2.0.0) - Breaking changes
 - **Minor** (v2.1.0) - New features, backward compatible
 - **Patch** (v2.1.1) - Bug fixes, documentation updates
+
+When tagging a new version, update the version badge in `/README.md`:
+
+```html
+<img src="https://img.shields.io/badge/version-X.Y.Z-blue?style=flat" alt="Version">
+```

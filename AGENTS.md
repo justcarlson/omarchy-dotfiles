@@ -32,6 +32,7 @@ stow -D omarchy-config        # Remove symlinks
 `dev` → PR → `main` → version tag
 
 - Commit to `dev`, PR to `main`, tag releases on `main`
+- Update /README.md version badge to match new version tag
 - CI runs on push to `dev` and PRs to `main`
 - See [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) for details
 
