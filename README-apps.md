@@ -51,7 +51,7 @@ Installed during `./install.sh`:
 
 Cursor is installed from the Omarchy repo. Updates come via `yay -Syu`.
 
-To suppress update notifications, the dotfiles include `~/.config/Cursor/User/settings.json` with:
+To suppress update notifications, add to `~/.config/Cursor/User/settings.json`:
 ```json
 {
   "update.mode": "none",
@@ -60,6 +60,8 @@ To suppress update notifications, the dotfiles include `~/.config/Cursor/User/se
   "extensions.autoUpdate": false
 }
 ```
+
+> **Note:** Cursor's config directory contains runtime files mixed with settings, so it's not managed by stow. Apply settings manually or copy from the snippet above.
 
 ## Manual Installation (yay)
 

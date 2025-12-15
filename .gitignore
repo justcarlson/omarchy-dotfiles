@@ -4,3 +4,6 @@ omarchy-config/.local/bin/claude
 
 # Generated files - source of truth is lib/packages.sh PACKAGE_REGISTRY
 omarchy-config/.config/hypr/autostart-apps.conf
+
+# Cursor - not stow-managed (runtime files mixed with config)
+omarchy-config/.config/Cursor/
