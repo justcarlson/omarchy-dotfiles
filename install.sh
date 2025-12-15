@@ -87,13 +87,13 @@ CONFIGS=(
     ".config/ghostty"
     ".config/uwsm"
     ".config/opencode"
+    ".config/cursor-flags.conf"
     ".config/starship.toml"
     ".config/Typora/themes/ia_typora.css"
     ".config/Typora/themes/ia_typora_night.css"
     ".bashrc"
     ".XCompose"
     ".local/share/warp-terminal"
-    ".local/share/applications/yazi.desktop"
 )
 
 # Build dependencies for hyprpm (Hy3 plugin)

@@ -7,7 +7,7 @@
     <a href="https://github.com/basecamp/omarchy"><img src="https://img.shields.io/badge/Omarchy-FF6B6B?style=flat&logo=linux&logoColor=white" alt="Omarchy"></a>
     <img src="https://img.shields.io/badge/Arch_Linux-1793D1?style=flat&logo=arch-linux&logoColor=white" alt="Arch Linux">
     <img src="https://img.shields.io/badge/Hyprland-58E1FF?style=flat&logo=hyprland&logoColor=black" alt="Hyprland">
-    <img src="https://img.shields.io/badge/version-2.0.0-blue?style=flat" alt="Version">
+    <img src="https://img.shields.io/badge/version-2.3.0-blue?style=flat" alt="Version">
     <img src="https://img.shields.io/badge/license-MIT-green?style=flat" alt="License">
   </p>
 </p>
@@ -24,9 +24,14 @@
 
 ## Quick Start
 
+> **📍 You're on the `dev` branch**
+> 
+> This branch contains the latest development changes. For stable releases, see the [`main`](https://github.com/justcarlson/dotfiles/tree/main) branch.
+
 ```bash
 git clone git@github.com:justcarlson/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+git checkout dev
 ./install.sh
 ```
 
@@ -126,13 +131,7 @@ cd ~/.dotfiles && git pull   # Sync latest (instant apply)
 <details>
 <summary>Git Workflow</summary>
 
-```bash
-git checkout -b feature/thing
-# ... edit configs ...
-git add -A && git commit -m "feat: thing"
-git push -u origin feature/thing
-gh pr create --fill
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full git workflow, commit conventions, and contribution guidelines.
 
 </details>
 

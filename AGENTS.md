@@ -60,6 +60,10 @@ stow --adopt omarchy-config   # Adopt existing configs
 - 🚫 **Never:** Edit `~/.local/share/omarchy/` files - override in personal configs
 - 🚫 **Never:** Commit API keys or secrets to git
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the required git workflow, commit conventions, and contribution guidelines.
+
 ## Patterns
 
 **Adding a new package:**
