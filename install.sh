@@ -23,19 +23,22 @@ tui_setup_trap
 DRY_RUN=false
 SKIP_PACKAGES=false
 SKIP_SECRETS=false
+DEBUG=false
 
 usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --check       Dry run - show what would be done without making changes"
+    echo "  --check          Dry run - show what would be done without making changes"
     echo "  --skip-packages  Skip optional package installation"
     echo "  --skip-secrets   Skip API key configuration"
-    echo "  -h, --help    Show this help message"
+    echo "  --debug          Enable debug output for troubleshooting"
+    echo "  -h, --help       Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0              # Full interactive install"
     echo "  $0 --check      # Preview changes without applying"
+    echo "  $0 --debug      # Run with debug output"
     echo "  $0 --skip-packages --skip-secrets  # Minimal install"
 }
 
@@ -52,6 +55,11 @@ parse_args() {
                 ;;
             --skip-secrets)
                 SKIP_SECRETS=true
+                shift
+                ;;
+            --debug)
+                DEBUG=true
+                export OMARCHY_DEBUG=1
                 shift
                 ;;
             -h|--help)
