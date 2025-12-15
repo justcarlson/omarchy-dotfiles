@@ -40,13 +40,15 @@ stow --adopt omarchy-config   # Adopt existing configs
 │   ├── tui.sh              → Gum wrappers for styled UI
 │   ├── secrets.sh          → ~/.secrets management
 │   └── packages.sh         → Package registry & installer
+├── docs/                   → Documentation
+│   ├── README.md           → Docs index
+│   ├── contributing/       → Contribution guidelines
+│   └── reference/          → Packages & keybindings
 ├── omarchy-config/         → Stow package (mirrors ~/)
 │   ├── .config/hypr/       → Hyprland + Hy3 config
 │   ├── .config/ghostty/    → Terminal config
 │   ├── .local/bin/         → Scripts
 │   └── .bashrc             → Shell config
-├── README-apps.md          → Package reference
-└── README-keybindings.md   → Keybindings reference
 ```
 
 ## Boundaries
@@ -62,7 +64,7 @@ stow --adopt omarchy-config   # Adopt existing configs
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the required git workflow, commit conventions, and contribution guidelines.
+See [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) for the required git workflow, commit conventions, and contribution guidelines.
 
 ## Patterns
 
