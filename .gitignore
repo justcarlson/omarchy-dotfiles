@@ -1,3 +1,6 @@
 # Large binaries - install these via package manager instead
 omarchy-config/.local/bin/droid
 omarchy-config/.local/bin/claude
+
+# Generated files - source of truth is lib/packages.sh PACKAGE_REGISTRY
+omarchy-config/.config/hypr/autostart-apps.conf
