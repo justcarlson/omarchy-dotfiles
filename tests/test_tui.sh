@@ -118,6 +118,34 @@ test_has_tty() {
     fi
 }
 
+test_is_ci() {
+    echo ""
+    echo "=== _is_ci tests ==="
+    
+    # Test with CI=true
+    local result
+    result=$(CI=true bash -c '
+        source "'"$REPO_DIR"'/lib/tui.sh"
+        _is_ci && echo "CI detected" || echo "Not CI"
+    ' 2>&1)
+    assert_eq "CI detected" "$result" "_is_ci returns true when CI=true"
+    
+    # Test with GITHUB_ACTIONS set
+    result=$(GITHUB_ACTIONS=true bash -c '
+        source "'"$REPO_DIR"'/lib/tui.sh"
+        _is_ci && echo "CI detected" || echo "Not CI"
+    ' 2>&1)
+    assert_eq "CI detected" "$result" "_is_ci returns true when GITHUB_ACTIONS set"
+    
+    # Test without CI variables
+    result=$(bash -c '
+        unset CI GITHUB_ACTIONS
+        source "'"$REPO_DIR"'/lib/tui.sh"
+        _is_ci && echo "CI detected" || echo "Not CI"
+    ' 2>&1)
+    assert_eq "Not CI" "$result" "_is_ci returns false when no CI variables"
+}
+
 test_gum_version_ok() {
     echo ""
     echo "=== _gum_version_ok tests ==="
@@ -370,6 +398,7 @@ run_all_tests() {
     # Run test suites
     test_has_gum
     test_has_tty
+    test_is_ci
     test_gum_version_ok
     test_debug_function
     test_tui_choose_no_args
