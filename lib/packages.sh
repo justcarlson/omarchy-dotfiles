@@ -97,6 +97,7 @@ pkg_list_categories() {
     for entry in "${PACKAGE_REGISTRY[@]}"; do
         local category
         category=$(pkg_get_field "$entry" "category")
+        # shellcheck disable=SC2076 # Intentional literal match for array membership check
         if [[ ! " ${categories[*]} " =~ " ${category} " ]]; then
             categories+=("$category")
             echo "$category"

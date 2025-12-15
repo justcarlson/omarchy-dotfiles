@@ -394,14 +394,6 @@ tui_choose_multi() {
     _debug "tui_choose_multi: falling back to text mode"
     
     # Text fallback
-    local output_fd=2  # stderr by default
-    local input_source="/dev/tty"
-    
-    if _has_tty; then
-        output_fd="/dev/tty"
-        input_source="/dev/tty"
-    fi
-    
     if _has_tty; then
         echo "$header" >/dev/tty
         local i=1

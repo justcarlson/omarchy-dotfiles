@@ -10,6 +10,7 @@
     <img src="https://img.shields.io/badge/version-3.0.0-blue?style=flat" alt="Version">
     <img src="https://img.shields.io/badge/license-MIT-green?style=flat" alt="License">
     <a href="docs/contributing/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
   </p>
 </p>
 

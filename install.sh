@@ -23,7 +23,6 @@ tui_setup_trap
 DRY_RUN=false
 SKIP_PACKAGES=false
 SKIP_SECRETS=false
-DEBUG=false
 
 usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -58,7 +57,6 @@ parse_args() {
                 shift
                 ;;
             --debug)
-                DEBUG=true
                 export OMARCHY_DEBUG=1
                 shift
                 ;;

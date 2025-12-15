@@ -10,8 +10,6 @@ echo "  Omarchy Dotfiles Test Suite"
 echo "========================================"
 echo ""
 
-total_passed=0
-total_failed=0
 suites_run=0
 suites_failed=0
 
@@ -24,13 +22,12 @@ for test_file in "$SCRIPT_DIR"/test_*.sh; do
         
         if bash "$test_file"; then
             echo ""
-            ((suites_run++))
+            suites_run=$((suites_run + 1))
         else
-            exit_code=$?
             echo ""
             echo "Suite $test_name had failures"
-            ((suites_run++))
-            ((suites_failed++))
+            suites_run=$((suites_run + 1))
+            suites_failed=$((suites_failed + 1))
         fi
         
         echo "----------------------------------------"

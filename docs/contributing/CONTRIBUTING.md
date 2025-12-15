@@ -50,6 +50,36 @@ git checkout dev
 - **Never** push directly to `main`
 - **Never** delete `dev` branch after merge
 
+## CI Pipeline
+
+All PRs to `main` must pass CI before merging.
+
+### Jobs
+
+| Job | Purpose |
+|-----|---------|
+| `shellcheck` | Lint bash scripts (warning severity) |
+| `test` | Run `./tests/run_tests.sh` |
+| `dry-run` | Run `./install.sh --check` |
+
+### Local Validation
+
+```bash
+# Run all checks locally before pushing
+shellcheck -S warning -e SC1090 -e SC1091 install.sh lib/*.sh
+./tests/run_tests.sh
+./install.sh --check --skip-packages --skip-secrets
+```
+
+### Branch Protection
+
+`main` is protected:
+- PRs required (no direct pushes)
+- All CI jobs must pass
+- Enforced for administrators
+
+See `.github/AGENTS.md` for CI implementation details.
+
 ## Commit Messages
 
 Use clear, descriptive commit messages:
