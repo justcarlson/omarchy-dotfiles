@@ -24,6 +24,12 @@ fixes_needs_thunderbolt_fix() {
 # Apply the thunderbolt multi-monitor fix
 # Returns: 0 on success, 1 on failure
 fixes_apply_thunderbolt() {
+    # Early sudo check to prevent partial failure
+    if ! sudo -v 2>/dev/null; then
+        tui_error "sudo authentication required"
+        return 1
+    fi
+    
     # Remove the config file
     if sudo rm "$THUNDERBOLT_MODULE_CONF"; then
         tui_success "Removed $THUNDERBOLT_MODULE_CONF"
@@ -73,7 +79,9 @@ fixes_run_all() {
         fi
         
         if tui_confirm "Apply fix (remove file and regenerate initramfs)?"; then
-            fixes_apply_thunderbolt
+            if ! fixes_apply_thunderbolt; then
+                tui_warning "Fix application failed - manual intervention may be required"
+            fi
         else
             tui_muted "Skipping. Apply later with:"
             tui_muted "  sudo rm $THUNDERBOLT_MODULE_CONF && sudo mkinitcpio -P"
@@ -83,4 +91,6 @@ fixes_run_all() {
     if [[ "$has_fixes" == "false" ]]; then
         tui_success "No system fixes needed"
     fi
+    
+    return 0
 }
