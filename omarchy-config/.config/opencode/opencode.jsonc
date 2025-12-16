@@ -4,7 +4,10 @@
     "exa": {
       "type": "remote",
       "url": "https://mcp.exa.ai/mcp?exaApiKey={env:EXA_API_KEY}&tools=web_search_exa,get_code_context_exa",
-      "enabled": true
+      "enabled": true,
+      "headers": {
+        "Accept": "application/json, text/event-stream"
+      }
     },
     "Ref": {
       "type": "remote",
