@@ -68,10 +68,10 @@ gh pr create --title "feat: add new feature" --body "Description"
 
 - **`dev`** - Development branch, all work happens here
 - **`main`** - Stable branch, always safe to clone
-- **Never** push directly to `main`
+- **Never** push directly to `main` or `dev` (use PRs)
 - **Never** delete `dev` branch
 - **Never** force push to `dev` or `main`
-- **Never** manually sync `dev` with `main` (no longer needed)
+- **Rarely** need to sync `dev` with `main` (only if `main` has hotfixes that `dev` lacks)
 
 ### Rollback
 

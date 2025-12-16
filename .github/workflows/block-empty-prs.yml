@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check for file changes
-        uses: tj-actions/changed-files@v46
+        # Pinned to SHA for security (v46)
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
         id: changed-files
 
       - name: Fail if no files changed

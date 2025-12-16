@@ -35,7 +35,7 @@ stow -D omarchy-config        # Remove symlinks
 - Commit to `dev`, PR to `main`, merge Release PR to create version
 - Version badge, CHANGELOG, and tags are automated by Release Please
 - Never force push to `dev` or `main`
-- Never manually sync `dev` with `main` (not needed with this workflow)
+- Rarely need to sync `dev` with `main` (only if `main` has hotfixes that `dev` lacks)
 - CI runs on push to `dev` and PRs to `main`
 - See [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) for details
 
