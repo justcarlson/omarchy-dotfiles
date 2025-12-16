@@ -1,6 +1,7 @@
 #!/bin/bash
 # System Fixes Library - Hardware-specific fixes for Omarchy
 # Source this file: source "$(dirname "$0")/lib/fixes.sh"
+# Dependencies: Requires lib/tui.sh to be sourced first (for _is_ci, _has_tty, tui_*)
 
 # =============================================================================
 # Configuration
