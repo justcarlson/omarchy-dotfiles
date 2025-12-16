@@ -13,13 +13,28 @@ git checkout dev
 
 ## Git Workflow
 
-All changes follow this workflow:
+All changes follow this automated workflow:
 
-1. **Work on `dev` branch** - All changes are committed to `dev`
-2. **Update version badge** - If releasing, update `/README.md` badge in same PR
-3. **Create PR to `main`** - Push `dev` and create a pull request
-4. **Merge to `main`** - Merge the PR (preserving `dev` branch)
-5. **Tag release** - Create version tag on `main` after merge
+1. **Work on `dev` branch** - Commit changes using Conventional Commits
+2. **Create PR to `main`** - CI validates, requires passing checks
+3. **Merge to `main`** - Release Please auto-creates a Release PR
+4. **Merge Release PR** - Auto-creates git tag and GitHub Release
+
+### Conventional Commits
+
+All commits must follow the [Conventional Commits](https://conventionalcommits.org) format:
+
+| Prefix | Version Bump | Example |
+|--------|--------------|---------|
+| `feat:` | Minor (3.4.0 → 3.5.0) | `feat: add waybar weather module` |
+| `fix:` | Patch (3.4.0 → 3.4.1) | `fix: correct hyprland monitor config` |
+| `feat!:` | Major (3.4.0 → 4.0.0) | `feat!: restructure config directory` |
+| `docs:` | No release | `docs: update keybindings reference` |
+| `chore:` | No release | `chore: update CI workflow` |
+| `refactor:` | No release | `refactor: simplify install.sh logic` |
+| `perf:` | Patch | `perf: optimize startup time` |
+| `test:` | No release | `test: add install.sh tests` |
+| `ci:` | No release | `ci: update GitHub Actions` |
 
 ### Commands
 
@@ -27,40 +42,47 @@ All changes follow this workflow:
 # Make changes on dev
 git checkout dev
 # ... make changes ...
-git add -A && git commit -m "message"
+git add -A && git commit -m "feat: add new feature"
 git push origin dev
 
-# Create and merge PR
-gh pr create --title "Title" --body "Description"
-gh pr merge --merge
+# Create PR to main
+gh pr create --title "feat: add new feature" --body "Description"
 
-# Sync main locally
-git fetch origin && git checkout main && git pull && git checkout dev
-
-# Sync dev with main (after PR merged)
-git checkout dev && git pull origin dev
-git merge main
-git push origin dev
-
-# Tag a release (on main)
-git checkout main
-git tag -a v1.0.0 -m "Release description"
-git push origin v1.0.0
-git checkout dev
+# After PR merges:
+# - Release Please auto-creates a Release PR
+# - Merge the Release PR to create a new version tag
 ```
+
+### What Gets Automated
+
+| Task | Automated By |
+|------|--------------|
+| Version bump decision | Release Please (from commit prefixes) |
+| CHANGELOG.md updates | Release Please |
+| README version badge | Release Please |
+| Git tag creation | Release Please |
+| GitHub Release | Release Please |
+| Empty PR prevention | CI (block-empty-prs workflow) |
 
 ### Branch Rules
 
-- **`dev`** - Development branch, preserved after merges
-- **`main`** - Stable branch, receives merges from `dev`
-- **Never** push directly to `main`
-- **Never** delete `dev` branch after merge
+- **`dev`** - Development branch, all work happens here
+- **`main`** - Stable branch, always safe to clone
+- **Never** push directly to `main` or `dev` (use PRs)
+- **Never** delete `dev` branch
 - **Never** force push to `dev` or `main`
-- **Sync dev with main** using `git merge main`, not rebase
+- **Rarely** need to sync `dev` with `main` (only if `main` has hotfixes that `dev` lacks)
+
+### Rollback
+
+If a bad config is merged to `main`:
+
+1. **From GitHub**: Revert the PR (creates a revert commit)
+2. **Or checkout a previous tag**: `git clone --branch v3.4.0 ...`
 
 ## CI Pipeline
 
-All PRs to `main` must pass CI before merging.
+All PRs must pass CI before merging.
 
 ### Jobs
 
@@ -69,6 +91,7 @@ All PRs to `main` must pass CI before merging.
 | `shellcheck` | Lint bash scripts (warning severity) |
 | `test` | Run `./tests/run_tests.sh` |
 | `dry-run` | Run `./install.sh --check` |
+| `check-changes` | Block PRs with 0 file changes |
 
 ### Local Validation
 
@@ -81,23 +104,12 @@ shellcheck -S warning -e SC1090 -e SC1091 install.sh lib/*.sh
 
 ### Branch Protection
 
-`main` is protected:
+Both `main` and `dev` are protected:
 - PRs required (no direct pushes)
 - All CI jobs must pass
 - Enforced for administrators
 
 See `.github/AGENTS.md` for CI implementation details.
-
-## Commit Messages
-
-Use clear, descriptive commit messages:
-
-- `Add <feature>` - New functionality
-- `Fix <issue>` - Bug fixes
-- `Update <component>` - Enhancements to existing features
-- `Remove <item>` - Deletions
-- `docs: <description>` - Documentation-only changes
-- `chore: <description>` - Maintenance tasks
 
 ## Adding New Packages
 
@@ -124,23 +136,15 @@ Use this for apps that mix runtime files with config (like Cursor).
 
 ## Version Tagging
 
-- **Major** (v2.0.0) - Breaking changes
-- **Minor** (v2.1.0) - New features, backward compatible
-- **Patch** (v2.1.1) - Bug fixes, documentation updates
+Versioning is fully automated by Release Please:
 
-### Workflow
+- **Major** (v2.0.0) - Breaking changes (`feat!:` or `fix!:`)
+- **Minor** (v2.1.0) - New features (`feat:`)
+- **Patch** (v2.1.1) - Bug fixes (`fix:`, `perf:`)
 
-1. Update the version badge in `/README.md` as part of your feature PR:
-   ```html
-   <img src="https://img.shields.io/badge/version-X.Y.Z-blue?style=flat" alt="Version">
-   ```
-2. Merge PR to `main`
-3. Tag the release on `main`:
-   ```bash
-   git checkout main && git pull origin main
-   git tag vX.Y.Z
-   git push origin vX.Y.Z
-   git checkout dev
-   ```
+The Release PR updates:
+- `version.txt`
+- `CHANGELOG.md`
+- README.md version badge
 
-This ensures the tag includes the correct version badge and avoids extra PRs.
+Simply merge the Release PR to create the release.
