@@ -13,6 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/tui.sh"
 source "$SCRIPT_DIR/lib/secrets.sh"
 source "$SCRIPT_DIR/lib/packages.sh"
+source "$SCRIPT_DIR/lib/fixes.sh"
 
 # Setup clean exit on Ctrl+C
 tui_setup_trap
@@ -23,6 +24,7 @@ tui_setup_trap
 DRY_RUN=false
 SKIP_PACKAGES=false
 SKIP_SECRETS=false
+SKIP_FIXES=false
 
 usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -31,6 +33,7 @@ usage() {
     echo "  --check          Dry run - show what would be done without making changes"
     echo "  --skip-packages  Skip optional package installation"
     echo "  --skip-secrets   Skip API key configuration"
+    echo "  --skip-fixes     Skip system fixes"
     echo "  --debug          Enable debug output for troubleshooting"
     echo "  -h, --help       Show this help message"
     echo ""
@@ -54,6 +57,10 @@ parse_args() {
                 ;;
             --skip-secrets)
                 SKIP_SECRETS=true
+                shift
+                ;;
+            --skip-fixes)
+                SKIP_FIXES=true
                 shift
                 ;;
             --debug)
@@ -629,6 +636,22 @@ main() {
         enable_tailscale
         echo ""
     fi
+    
+    # Step 5c: System fixes
+    tui_step "5c" 6 "System fixes"
+    if [[ "$SKIP_FIXES" == "true" ]]; then
+        tui_muted "Skipped (--skip-fixes)"
+    elif [[ "$DRY_RUN" == "true" ]]; then
+        if fixes_needs_thunderbolt_fix; then
+            tui_info "[DRY RUN] Would prompt for thunderbolt multi-monitor fix"
+            tui_muted "  File exists: $THUNDERBOLT_MODULE_CONF"
+        else
+            tui_info "[DRY RUN] No system fixes needed"
+        fi
+    else
+        fixes_run_all
+    fi
+    echo ""
     
     # Step 6: Secrets & MCP
     tui_step 6 6 "API keys & secrets"
