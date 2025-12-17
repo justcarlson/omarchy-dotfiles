@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.7.4](https://github.com/justcarlson/dotfiles/compare/v3.7.3...v3.7.4) (2025-12-17)
+
+
+### Bug Fixes
+
+* restore oh-my-opencode config and add install automation ([6c5a5c0](https://github.com/justcarlson/dotfiles/commit/6c5a5c05ea44c5aec1ab68a0a8888033dbc88c05))
+* restore oh-my-opencode config and add install automation ([8411bf9](https://github.com/justcarlson/dotfiles/commit/8411bf9299930a46d73a31055f2d273594441771))
+
 ## [3.7.3](https://github.com/justcarlson/dotfiles/compare/v3.7.2...v3.7.3) (2025-12-17)
 
 

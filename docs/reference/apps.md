@@ -73,7 +73,7 @@ Uses Claude Max for Claude models, OpenCode Zen for others:
 | Oracle | Design & debugging | gpt-5.2 | OpenCode Zen |
 | Frontend UI/UX | UI development | gemini-3-pro | OpenCode Zen |
 | Document Writer | Technical writing | gemini-3-pro | OpenCode Zen |
-| Multimodal Looker | Visual content analysis | gemini-3-pro | OpenCode Zen |
+| Multimodal Looker | Visual content analysis | claude-haiku-4-5 | Anthropic Free |
 | Explore | Fast codebase search | grok-code | OpenCode Zen |
 
 #### MCP Servers
