@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.1](https://github.com/justcarlson/dotfiles/compare/v3.7.0...v3.7.1) (2025-12-17)
+
+
+### Bug Fixes
+
+* use dynamic version badge to prevent release-please conflicts ([#56](https://github.com/justcarlson/dotfiles/issues/56)) ([380740c](https://github.com/justcarlson/dotfiles/commit/380740c7fee6b4f93c3b49e10e3e3eb0f11aa32a))
+
 ## [3.7.0](https://github.com/justcarlson/dotfiles/compare/v3.6.0...v3.7.0) (2025-12-17)
 
 
