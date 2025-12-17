@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.0](https://github.com/justcarlson/dotfiles/compare/v3.6.0...v3.7.0) (2025-12-17)
+
+
+### Features
+
+* add path-based CI filtering to skip tests for docs-only changes ([#49](https://github.com/justcarlson/dotfiles/issues/49)) ([#50](https://github.com/justcarlson/dotfiles/issues/50)) ([6dd16d3](https://github.com/justcarlson/dotfiles/commit/6dd16d3bed06cb65a9b9e7abb89f6d13cc0ef9b2)), closes [#37](https://github.com/justcarlson/dotfiles/issues/37)
+
 ## [3.6.0](https://github.com/justcarlson/dotfiles/compare/v3.5.0...v3.6.0) (2025-12-17)
 
 
