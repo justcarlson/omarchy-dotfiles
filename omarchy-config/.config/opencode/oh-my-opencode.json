@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "disabled_mcps": ["websearch_exa", "context7"],
+  "claude_code": {
+    "mcp": false,
+    "commands": false,
+    "skills": false,
+    "agents": false,
+    "hooks": false
+  },
+  "agents": {
+    "oracle": {
+      "model": "anthropic/claude-opus-4-5"
+    },
+    "frontend-ui-ux-engineer": {
+      "model": "opencode/gemini-3-pro"
+    },
+    "document-writer": {
+      "model": "anthropic/claude-sonnet-4-5"
+    },
+    "multimodal-looker": {
+      "model": "anthropic/claude-sonnet-4-5"
+    }
+  }
+}

@@ -29,7 +29,7 @@ secrets_init() {
 # =============================================================================
 # API Keys
 # =============================================================================
-# export EXA_API_KEY=""
+# export TAVILY_API_KEY=""
 # export REF_API_KEY=""
 
 # =============================================================================
@@ -90,7 +90,7 @@ secrets_has() {
 # =============================================================================
 
 # Prompt for a single secret
-# Usage: secrets_prompt "EXA_API_KEY" "Exa API key" "Get one at https://exa.ai"
+# Usage: secrets_prompt "TAVILY_API_KEY" "Tavily API key" "Get one at https://tavily.com"
 secrets_prompt() {
     local key="$1"
     local label="$2"
@@ -132,7 +132,7 @@ secrets_collect_mcp() {
     tui_muted "Keys are stored in ~/.secrets (never committed to git)"
     echo ""
     
-    secrets_prompt "EXA_API_KEY" "Exa API key" "Get one at https://exa.ai"
+    secrets_prompt "TAVILY_API_KEY" "Tavily API key" "Get one at https://tavily.com"
     secrets_prompt "REF_API_KEY" "Ref API key" "Get one at https://ref.tools"
 }
 
@@ -186,7 +186,7 @@ secrets_status() {
     tui_subheader "Secrets Status"
     echo ""
     
-    local keys=("EXA_API_KEY" "REF_API_KEY" "GITHUB_TOKEN" "ANTHROPIC_API_KEY")
+    local keys=("TAVILY_API_KEY" "REF_API_KEY" "GITHUB_TOKEN" "ANTHROPIC_API_KEY")
     
     for key in "${keys[@]}"; do
         local value

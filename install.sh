@@ -494,12 +494,12 @@ configure_secrets() {
     secrets_collect_mcp
     
     # Configure MCP for tools that need it
-    local exa_key ref_key
-    exa_key=$(secrets_get "EXA_API_KEY")
+    local tavily_key ref_key
+    tavily_key=$(secrets_get "TAVILY_API_KEY")
     ref_key=$(secrets_get "REF_API_KEY")
     
-    if [[ -n "$exa_key" || -n "$ref_key" ]]; then
-        configure_mcp_servers "$exa_key" "$ref_key"
+    if [[ -n "$tavily_key" || -n "$ref_key" ]]; then
+        configure_mcp_servers "$tavily_key" "$ref_key"
     fi
     
     echo ""
@@ -508,7 +508,7 @@ configure_secrets() {
 }
 
 configure_mcp_servers() {
-    local exa_key="$1"
+    local tavily_key="$1"
     local ref_key="$2"
     
     tui_info "Configuring MCP servers..."
@@ -517,8 +517,8 @@ configure_mcp_servers() {
     local mcp_config='{"mcpServers":{'
     local first=true
     
-    if [[ -n "$exa_key" ]]; then
-        mcp_config+='"exa":{"type":"http","url":"https://mcp.exa.ai/mcp?exaApiKey='"$exa_key"'","headers":{}}'
+    if [[ -n "$tavily_key" ]]; then
+        mcp_config+='"tavily":{"type":"http","url":"https://mcp.tavily.com/mcp/?tavilyApiKey='"$tavily_key"'","headers":{}}'
         first=false
     fi
     
@@ -539,9 +539,9 @@ configure_mcp_servers() {
     
     # Configure Claude Code if installed
     if command -v claude &>/dev/null; then
-        if [[ -n "$exa_key" ]]; then
-            claude mcp add exa --transport http "https://mcp.exa.ai/mcp?exaApiKey=$exa_key" --scope user 2>/dev/null && \
-                tui_muted "Added exa MCP to Claude Code"
+        if [[ -n "$tavily_key" ]]; then
+            claude mcp add tavily --transport http "https://mcp.tavily.com/mcp/?tavilyApiKey=$tavily_key" --scope user 2>/dev/null && \
+                tui_muted "Added tavily MCP to Claude Code"
         fi
         if [[ -n "$ref_key" ]]; then
             claude mcp add Ref --transport http "https://api.ref.tools/mcp?apiKey=$ref_key" --scope user 2>/dev/null && \
