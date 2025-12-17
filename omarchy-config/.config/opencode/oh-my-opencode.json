@@ -16,13 +16,13 @@
       "model": "opencode/gemini-3-pro"
     },
     "document-writer": {
-      "model": "opencode/gemini-3-pro"
+      "model": "opencode/gemini-3-flash"
     },
     "multimodal-looker": {
-      "model": "claude-haiku-4-5"
+      "model": "opencode/gemini-3-flash"
     },
     "explore": {
-      "model": "opencode/grok-code"
+      "model": "opencode/gemini-3-flash"
     }
   }
 }
