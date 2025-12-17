@@ -18,5 +18,5 @@ jobs:
           # Use PAT instead of GITHUB_TOKEN so Release Please commits trigger CI workflows.
           # GITHUB_TOKEN events don't trigger new workflow runs (GitHub security feature).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+          config-file: .release-please/config.json
+          manifest-file: .release-please/manifest.json
