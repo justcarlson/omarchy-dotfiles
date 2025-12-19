@@ -10,7 +10,7 @@
     <a href="https://github.com/justcarlson/dotfiles/releases"><img src="https://img.shields.io/github/v/release/justcarlson/dotfiles?style=flat&label=version&color=blue" alt="Version"></a>
     <!-- <img src="https://img.shields.io/badge/license-MIT-green?style=flat" alt="License"> ## no MIT license, presently--> 
     <a href="docs/contributing/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
+    <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
   </p>
 </p>
 
@@ -38,6 +38,8 @@ The installer guides you through setup with a polished TUI powered by [Gum](http
 | `--check` | Preview changes (dry run) |
 | `--skip-packages` | Skip optional packages |
 | `--skip-secrets` | Skip API key setup |
+| `--skip-fixes` | Skip system fixes |
+| `--debug` | Enable verbose debug output |
 
 ---
 
@@ -47,6 +49,8 @@ The installer guides you through setup with a polished TUI powered by [Gum](http
 - **GNU Stow** — Symlink management, edit configs in place
 - **Package Registry** — Single source of truth for optional apps
 - **Secrets Management** — `~/.secrets` for API keys (never committed)
+- **AI-Native Workflow** — Built-in support for [OpenCode](https://opencode.ai) and [Claude Code](https://github.com/anthropics/claude-code)
+- **Issue Tracking** — Local-first task management with [beads](https://github.com/steveyegge/beads)
 - **Idempotent** — Safe to run multiple times
 - **Auto-rollback** — Restores backups if something fails
 
@@ -58,14 +62,19 @@ The installer guides you through setup with a polished TUI powered by [Gum](http
 ~/.dotfiles/
 ├── install.sh            # Interactive installer
 ├── lib/                  # Modular libraries
+├── tests/                # Automated test suite
 ├── docs/                 # Documentation
+├── .beads/               # Local issue tracking
 └── omarchy-config/       # Stow package → ~/
     ├── .config/
     │   ├── hypr/         # Hyprland + Hy3 tiling
     │   ├── waybar/       # Status bar
     │   ├── ghostty/      # Terminal
-    │   └── walker/       # App launcher
-    ├── .local/bin/       # Scripts
+    │   ├── walker/       # App launcher
+    │   ├── uwsm/         # Session manager
+    │   ├── opencode/     # AI agent config
+    │   └── starship.toml # Shell prompt
+    ├── .local/bin/       # Custom scripts
     └── .bashrc           # Shell config
 ```
 
@@ -79,6 +88,7 @@ The installer guides you through setup with a polished TUI powered by [Gum](http
 | [Keybindings](docs/reference/keybindings.md) | Keyboard shortcuts |
 | [Packages](docs/reference/apps.md) | Available packages |
 | [Contributing](docs/contributing/CONTRIBUTING.md) | Git workflow |
+| [Agent Guide](AGENTS.md) | Instructions for AI agents |
 
 ---
 

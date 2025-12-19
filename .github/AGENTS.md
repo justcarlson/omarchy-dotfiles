@@ -8,7 +8,7 @@ parent: [AGENTS.md](../AGENTS.md)
 
 | File | Trigger | Purpose |
 |------|---------|---------|
-| `ci.yml` | Push to `dev`, PRs to `main` | Shellcheck, tests, dry-run |
+| `ci.yml` | PRs to `main` | Shellcheck, tests, dry-run |
 | `claude.yml` | @claude mentions | AI assistance in issues/PRs |
 | `claude-code-review.yml` | PR opened/updated | Automated code review |
 
@@ -29,9 +29,9 @@ parent: [AGENTS.md](../AGENTS.md)
 
 ## Branch Model
 
-- `dev` — Commit here, CI runs on push
-- `main` — Stable, receives PRs from `dev`, version tags (vX.Y.Z) applied here
-- Update /README.md version badge to match new version tag
+- `main` — Protected branch, all PRs target here, version tags (vX.Y.Z) applied here
+- Feature branches — Create from `main`, PR back to `main`
+- CI runs on all PRs to `main`
 - Never push directly to `main`
 
 ## Local Validation

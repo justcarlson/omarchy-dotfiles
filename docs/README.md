@@ -32,7 +32,7 @@ Welcome to the Omarchy Dotfiles documentation! This directory contains all docum
 ### For Contributors
 
 1. Read the [Contributing Guide](contributing/CONTRIBUTING.md)
-2. Work on the `dev` branch, create PRs to `main`
+2. Create feature branches from `main`, PR back to `main`
 
 ---
 

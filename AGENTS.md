@@ -29,14 +29,13 @@ stow -D omarchy-config        # Remove symlinks
 
 ## Git Workflow
 
-`dev` → PR → `main` → Release Please auto-tags
+`feature-branch` → PR → `main` → Release Please auto-tags
 
 - Use [Conventional Commits](https://conventionalcommits.org): `feat:`, `fix:`, `docs:`, `chore:`
-- Commit to `dev`, PR to `main`, merge Release PR to create version
+- Create feature branches from `main`, PR back to `main`
 - Version badge, CHANGELOG, and tags are automated by Release Please
-- Never force push to `dev` or `main`
-- Rarely need to sync `dev` with `main` (only if `main` has hotfixes that `dev` lacks)
-- CI runs on push to `dev` and PRs to `main`
+- CI runs on all PRs to `main`
+- Never force push to `main`
 - See [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) for details
 
 ## Project Structure
