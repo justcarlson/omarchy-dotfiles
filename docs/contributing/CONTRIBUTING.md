@@ -2,12 +2,9 @@
 
 ## Development Installation
 
-For working on the `dev` branch:
-
 ```bash
 git clone https://github.com/justcarlson/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-git checkout dev
 ./install.sh
 ```
 
@@ -15,10 +12,11 @@ git checkout dev
 
 All changes follow this automated workflow:
 
-1. **Work on `dev` branch** - Commit changes using Conventional Commits
-2. **Create PR to `main`** - CI validates, requires passing checks
-3. **Merge to `main`** - Release Please auto-creates a Release PR
-4. **Merge Release PR** - Auto-creates git tag and GitHub Release
+1. **Create feature branch from `main`** - Use descriptive names like `feat/waybar-weather`
+2. **Make commits using Conventional Commits** - See format below
+3. **Create PR to `main`** - CI validates, requires passing checks
+4. **Merge to `main`** - Release Please auto-creates a Release PR
+5. **Merge Release PR** - Auto-creates git tag and GitHub Release
 
 ### Conventional Commits
 
@@ -39,11 +37,14 @@ All commits must follow the [Conventional Commits](https://conventionalcommits.o
 ### Commands
 
 ```bash
-# Make changes on dev
-git checkout dev
+# Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feat/my-feature
+
 # ... make changes ...
 git add -A && git commit -m "feat: add new feature"
-git push origin dev
+git push -u origin feat/my-feature
 
 # Create PR to main
 gh pr create --title "feat: add new feature" --body "Description"
@@ -66,12 +67,10 @@ gh pr create --title "feat: add new feature" --body "Description"
 
 ### Branch Rules
 
-- **`dev`** - Development branch, all work happens here
-- **`main`** - Stable branch, always safe to clone
-- **Never** push directly to `main` or `dev` (use PRs)
-- **Never** delete `dev` branch
-- **Never** force push to `dev` or `main`
-- **Rarely** need to sync `dev` with `main` (only if `main` has hotfixes that `dev` lacks)
+- **`main`** - Protected branch, always stable, safe to clone
+- **Feature branches** - Created from `main`, PR back to `main`
+- **Never** push directly to `main` (use PRs)
+- **Never** force push to `main`
 
 ### Rollback
 
@@ -104,7 +103,7 @@ shellcheck -S warning -e SC1090 -e SC1091 install.sh lib/*.sh
 
 ### Branch Protection
 
-Both `main` and `dev` are protected:
+`main` is protected:
 - PRs required (no direct pushes)
 - All CI jobs must pass
 - Enforced for administrators

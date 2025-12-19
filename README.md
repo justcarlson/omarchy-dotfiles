@@ -10,7 +10,7 @@
     <a href="https://github.com/justcarlson/dotfiles/releases"><img src="https://img.shields.io/github/v/release/justcarlson/dotfiles?style=flat&label=version&color=blue" alt="Version"></a>
     <!-- <img src="https://img.shields.io/badge/license-MIT-green?style=flat" alt="License"> ## no MIT license, presently--> 
     <a href="docs/contributing/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
+    <a href="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/justcarlson/dotfiles/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
   </p>
 </p>
 
