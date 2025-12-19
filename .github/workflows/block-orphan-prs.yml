@@ -1,0 +1,33 @@
+name: Block Orphan PRs
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+jobs:
+  check-issue-link:
+    name: Check for Linked Issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Body for Issue Reference
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || "";
+            // Regex to find:
+            // 1. Beads IDs: .dotfiles-xyz
+            // 2. GitHub Issues: #123
+            // 3. Keywords: close, fix, resolve, address (case insensitive)
+            
+            // Standard GitHub closing keywords + "Address" for non-closing refs
+            const keywords = "(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|address|addresses|addressed)";
+            
+            // Matches: keyword followed by whitespace and either a beads ID or GH issue ID
+            const regex = new RegExp(`${keywords}\\s+(\\.dotfiles-\\w+|#\\d+)`, "i");
+            
+            if (!regex.test(body)) {
+              core.setFailed("❌ PR blocked: No linked issue found in description.\n\nPlease link an issue in the PR body using one of these formats:\n- Fixes .dotfiles-123\n- Addresses .dotfiles-123\n- Closes #42\n\nThis ensures every change is tracked.");
+            } else {
+              console.log("✅ Valid issue link found.");
+            }
