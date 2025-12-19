@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.1.0](https://github.com/justcarlson/dotfiles/compare/v4.0.0...v4.1.0) (2025-12-19)
+
+
+### Features
+
+* add orphan PR blocking workflow ([4f5695c](https://github.com/justcarlson/dotfiles/commit/4f5695c0532447e0bfb309d37832f053c2ed5267))
+* enforce issue linking in PRs ([f02f287](https://github.com/justcarlson/dotfiles/commit/f02f2875c83e593e23628683429341608547295d))
+
+
+### Bug Fixes
+
+* allow release-please PRs to skip orphan check ([3d58f0b](https://github.com/justcarlson/dotfiles/commit/3d58f0b9c385515c9e12a5fabac24b185f787bc1))
+* exclude release-please PRs from orphan check ([06b3be6](https://github.com/justcarlson/dotfiles/commit/06b3be668e9114242f06d62a1b66a9b5bdf203e9))
+
 ## [4.0.0](https://github.com/justcarlson/dotfiles/compare/v3.10.0...v4.0.0) (2025-12-19)
 
 
