@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.10.0](https://github.com/justcarlson/dotfiles/compare/v3.9.1...v3.10.0) (2025-12-19)
+
+
+### Features
+
+* add bd (beads) installation to install.sh ([e3b88fa](https://github.com/justcarlson/dotfiles/commit/e3b88fa1ff38ad0b6373ba4328e51dbd5d2da1fb))
+* add bd (beads) installation to install.sh ([8911543](https://github.com/justcarlson/dotfiles/commit/8911543aa6df2cf07a4e5bdf25d7f612077ea1b1))
+* initialize beads issue tracking ([32faa24](https://github.com/justcarlson/dotfiles/commit/32faa2470518a356a0497924f73b955411142412))
+* initialize beads issue tracking for dotfiles repo ([d263a20](https://github.com/justcarlson/dotfiles/commit/d263a20a5b671d39d0943cc7f87b517acf857b50))
+
+
+### Bug Fixes
+
+* address code review feedback for bd installation ([8940d07](https://github.com/justcarlson/dotfiles/commit/8940d07b80504013e164c4f19d20283da8296d88))
+
 ## [3.9.1](https://github.com/justcarlson/dotfiles/compare/v3.9.0...v3.9.1) (2025-12-19)
 
 
