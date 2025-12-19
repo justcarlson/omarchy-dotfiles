@@ -12,11 +12,19 @@ cd ~/.dotfiles
 
 All changes follow this automated workflow:
 
-1. **Create feature branch from `main`** - Use descriptive names like `feat/waybar-weather`
-2. **Make commits using Conventional Commits** - See format below
-3. **Create PR to `main`** - CI validates, requires passing checks
-4. **Merge to `main`** - Release Please auto-creates a Release PR
-5. **Merge Release PR** - Auto-creates git tag and GitHub Release
+1. **Create Issue** - Use `bd create` to track work:
+   ```bash
+   bd create "Add waybar weather module" -t feature
+   ```
+2. **Create feature branch from `main`** - Use descriptive names like `feat/waybar-weather`:
+   ```bash
+   git checkout main && git pull
+   git checkout -b feat/waybar-weather
+   ```
+3. **Make commits using Conventional Commits** - See format below
+4. **Create PR to `main`** - CI validates, requires passing checks. Link your issue in the PR body (e.g., "Fixes .dotfiles-123" or "Closes #42").
+5. **Merge to `main`** - Release Please auto-creates a Release PR
+6. **Merge Release PR** - Auto-creates git tag and GitHub Release
 
 ### Conventional Commits
 
