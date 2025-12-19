@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.8.0](https://github.com/justcarlson/dotfiles/compare/v3.7.4...v3.8.0) (2025-12-17)
+
+
+### Features
+
+* **opencode:** switch agents to Gemini 3 Flash ([1d36723](https://github.com/justcarlson/dotfiles/commit/1d367239b28cfb6a2d78dbc4bc355e8059f3a75c))
+* **opencode:** switch agents to Gemini 3 Flash ([9a60144](https://github.com/justcarlson/dotfiles/commit/9a601448c152a023ef82fa209c665fa467559006))
+
 ## [3.7.4](https://github.com/justcarlson/dotfiles/compare/v3.7.3...v3.7.4) (2025-12-17)
 
 
