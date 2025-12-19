@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.9.0](https://github.com/justcarlson/dotfiles/compare/v3.8.0...v3.9.0) (2025-12-19)
+
+
+### Features
+
+* **opencode:** add Sisyphus and librarian agent model configs ([16d5ca3](https://github.com/justcarlson/dotfiles/commit/16d5ca377f1f2d856e6d7d75c6598952f60fbe21))
+* **opencode:** add Sisyphus and librarian agent model configs ([fadf72f](https://github.com/justcarlson/dotfiles/commit/fadf72f920ca1d8330330228c7da4112fb66671b))
+
 ## [3.8.0](https://github.com/justcarlson/dotfiles/compare/v3.7.4...v3.8.0) (2025-12-17)
 
 
