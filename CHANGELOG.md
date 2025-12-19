@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/justcarlson/dotfiles/compare/v3.10.0...v4.0.0) (2025-12-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* dev branch is deprecated. Create feature branches from main.
+
+### Code Refactoring
+
+* migrate from dev/main to main-only branch strategy ([0447c9d](https://github.com/justcarlson/dotfiles/commit/0447c9d2bf5026e6f8d8e3eb1b78761236c8aa5a))
+
 ## [3.10.0](https://github.com/justcarlson/dotfiles/compare/v3.9.1...v3.10.0) (2025-12-19)
 
 
