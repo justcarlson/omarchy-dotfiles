@@ -9,6 +9,8 @@ jobs:
   check-issue-link:
     name: Check for Linked Issue
     runs-on: ubuntu-latest
+    # Skip for release-please PRs
+    if: ${{ !startsWith(github.head_ref, 'release-please--') }}
     steps:
       - name: Check PR Body for Issue Reference
         uses: actions/github-script@v7
