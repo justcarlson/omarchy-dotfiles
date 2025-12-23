@@ -6,13 +6,13 @@
       "type": "remote",
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey={env:TAVILY_API_KEY}"
     },
+    // Note: API key in URL is required by Ref's MCP endpoint.
+    // This is transmitted over HTTPS and is the recommended auth method.
     "Ref": {
       "type": "remote",
-      "url": "https://api.ref.tools/mcp",
+      "url": "https://api.ref.tools/mcp?apiKey={env:REF_API_KEY}",
       "enabled": true,
-      "headers": {
-        "x-ref-api-key": "{env:REF_API_KEY}"
-      }
+      "oauth": false
     }
   }
 }

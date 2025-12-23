@@ -177,6 +177,25 @@ secrets_verify_bashrc() {
     return 0
 }
 
+# Check if current shell config sources secrets (bash or fish)
+secrets_verify_shell() {
+    local shell_pref="bash"
+    [[ -f "$HOME/.config/omarchy/shell" ]] && shell_pref=$(cat "$HOME/.config/omarchy/shell")
+
+    if [[ "$shell_pref" == "fish" ]]; then
+        local fish_config="$HOME/.config/fish/config.fish"
+        if [[ -f "$fish_config" ]] && grep -q '\.secrets' "$fish_config"; then
+            return 0
+        fi
+        tui_warning "Fish config doesn't source ~/.secrets"
+        tui_muted "Run 'omarchy shell fish' to reconfigure"
+        return 1
+    else
+        secrets_verify_bashrc
+        return $?
+    fi
+}
+
 # =============================================================================
 # Display
 # =============================================================================

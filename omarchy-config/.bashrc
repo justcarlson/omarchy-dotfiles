@@ -2,47 +2,24 @@
 # If not running interactively, don't do anything (leave this at the top of this file)
 [[ $- != *i* ]] && return
 
+# Source secrets first (available in both bash and fish via exec)
+[[ -f ~/.secrets ]] && source ~/.secrets
+
+# Load shell preference (defaults to bash)
+[[ -f ~/.config/omarchy/shell ]] && OMARCHY_SHELL=$(cat ~/.config/omarchy/shell)
+OMARCHY_SHELL="${OMARCHY_SHELL:-bash}"
+
+# Auto-launch fish shell if preference is set to fish
+if [[ "$OMARCHY_SHELL" == "fish" ]] && command -v fish &> /dev/null; then
+	if [[ $(ps --no-header --pid=$PPID --format=comm) != "fish" && -z ${BASH_EXECUTION_STRING} && ${SHLVL} == 1 ]]
+	then
+		shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=''
+		exec fish $LOGIN_OPTION
+	fi
+fi
+
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
 source ~/.local/share/omarchy/default/bash/rc
 
-# Add your own exports, aliases, and functions here.
-#
-# Make an alias for invoking commands you use constantly
-# alias p='python'
-alias cursor='cursor'
-alias code='cursor'
-export PATH="$HOME/.local/bin:$PATH"
-
-# Source secrets (API keys, tokens - not tracked in git)
-[[ -f ~/.secrets ]] && source ~/.secrets
-
-# 1Password SSH agent
-export SSH_AUTH_SOCK=~/.1password/agent.sock
-
-# OpenCode aliases (primary CLI agent)
-alias oc='opencode'
-alias oc-c='opencode --continue'
-alias oc-s='opencode --session'
-alias oc-run='opencode run'
-
-# Claude Code aliases (fallback CLI agent)
-alias c-yolo='claude --dangerously-skip-permissions'
-alias c-yolo-o='claude --dangerously-skip-permissions --model opus'
-alias c-yolo-s='claude --dangerously-skip-permissions --model sonnet'
-alias c-yolo-h='claude --dangerously-skip-permissions --model haiku'
-alias c-continue='claude --continue'
-alias c-c='claude --continue'
-alias c-resume='claude --resume'
-alias c-r='claude --resume'
-alias c-print='claude --print'
-alias c-p='claude --print'
-
-# Created by `pipx` on 2025-11-29 19:23:05
-export PATH="$PATH:/home/justincarlson/.local/bin"
-
-# Created by `pipx` on 2025-12-08 17:46:40
-export PATH="$PATH:/home/justincarlson/.dotfiles/omarchy-config/.local/bin"
-
-# opencode
-export PATH=/home/justincarlson/.opencode/bin:$PATH
+# Add your own exports, aliases, and functions below.
