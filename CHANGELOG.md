@@ -1,5 +1,20 @@
 # Changelog
 
+## [4.3.0](https://github.com/justcarlson/dotfiles/compare/v4.2.0...v4.3.0) (2025-12-23)
+
+
+### Features
+
+* add multi-shell support with bash/fish selection ([c790d4e](https://github.com/justcarlson/dotfiles/commit/c790d4eeac766c58fe7c22d194a50d7f567c94ec))
+* add multi-shell support with bash/fish selection ([9899c5b](https://github.com/justcarlson/dotfiles/commit/9899c5b6eff2971018407aab678c4110a0da616e))
+
+
+### Bug Fixes
+
+* add shellcheck directive to .bashrc ([a2a0171](https://github.com/justcarlson/dotfiles/commit/a2a017193b1bca99ddbb3c65acca28ad71e76275))
+* address code review feedback for shell configuration ([5a98a1a](https://github.com/justcarlson/dotfiles/commit/5a98a1a33dd67936e52f8b597e7c35bbe16523b7))
+* correct shellcheck error in secrets_verify_shell ([fadac8d](https://github.com/justcarlson/dotfiles/commit/fadac8d9a7ac286368df5887dcaf9ed8e4ad064f))
+
 ## [4.2.0](https://github.com/justcarlson/dotfiles/compare/v4.1.0...v4.2.0) (2025-12-19)
 
 
