@@ -8,11 +8,9 @@
     },
     "Ref": {
       "type": "remote",
-      "url": "https://api.ref.tools/mcp",
+      "url": "https://api.ref.tools/mcp?apiKey={env:REF_API_KEY}",
       "enabled": true,
-      "headers": {
-        "x-ref-api-key": "{env:REF_API_KEY}"
-      }
+      "oauth": false
     }
   }
 }

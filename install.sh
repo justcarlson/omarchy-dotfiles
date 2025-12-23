@@ -14,6 +14,7 @@ source "$SCRIPT_DIR/lib/tui.sh"
 source "$SCRIPT_DIR/lib/secrets.sh"
 source "$SCRIPT_DIR/lib/packages.sh"
 source "$SCRIPT_DIR/lib/fixes.sh"
+source "$SCRIPT_DIR/lib/shell.sh"
 
 # Setup clean exit on Ctrl+C
 tui_setup_trap
@@ -98,6 +99,9 @@ CONFIGS=(
     ".config/Typora/themes/ia_typora_night.css"
     ".bashrc"
     ".XCompose"
+    ".local/bin/omarchy"
+    ".local/bin/omarchy-launch-browser"
+    ".local/bin/setup-claude-code-statusline.sh"
     ".local/share/warp-terminal"
 )
 
@@ -717,18 +721,27 @@ main() {
     tui_ensure_gum
     
     # Step 1: Prerequisites
-    tui_step 1 6 "Checking prerequisites"
+    tui_step 1 7 "Checking prerequisites"
     install_stow
     echo ""
     
     # Step 2: Backup & Stow
-    tui_step 2 6 "Installing configs"
+    tui_step 2 7 "Installing configs"
     backup_existing_configs
     stow_configs
     echo ""
-    
-    # Step 3: Hy3 Plugin
-    tui_step 3 6 "Hyprland plugins"
+
+    # Step 3: Shell Configuration
+    tui_step 3 7 "Shell configuration"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        tui_info "[DRY RUN] Would prompt for shell selection (Bash or Fish)"
+    else
+        select_shell
+    fi
+    echo ""
+
+    # Step 4: Hy3 Plugin
+    tui_step 4 7 "Hyprland plugins"
     if [[ "$DRY_RUN" == "true" ]]; then
         tui_info "[DRY RUN] Would prompt for Hy3 installation"
     else
@@ -736,8 +749,8 @@ main() {
     fi
     echo ""
     
-    # Step 4: CLI Agents (OpenCode + Claude Code) and Tools
-    tui_step 4 6 "CLI coding agents & tools"
+    # Step 5: CLI Agents (OpenCode + Claude Code) and Tools
+    tui_step 5 7 "CLI coding agents & tools"
     if [[ "$DRY_RUN" == "true" ]]; then
         tui_info "[DRY RUN] Would prompt for CLI agent installation (OpenCode, Claude Code)"
         install_opencode_plugin  # Handles its own dry-run check
@@ -749,8 +762,8 @@ main() {
     fi
     echo ""
     
-    # Step 5: Optional Packages
-    tui_step 5 6 "Optional packages"
+    # Step 6: Optional Packages
+    tui_step 6 7 "Optional packages"
     if [[ "$SKIP_PACKAGES" == "true" ]]; then
         tui_muted "Skipped (--skip-packages)"
     elif [[ "$DRY_RUN" == "true" ]]; then
@@ -761,15 +774,15 @@ main() {
     fi
     echo ""
     
-    # Step 5b: Enable Tailscale daemon if installed
+    # Step 6b: Enable Tailscale daemon if installed
     if command -v tailscale &>/dev/null; then
-        tui_step "5b" 6 "Tailscale daemon"
+        tui_step "6b" 7 "Tailscale daemon"
         enable_tailscale
         echo ""
     fi
     
-    # Step 5c: System fixes
-    tui_step "5c" 6 "System fixes"
+    # Step 6c: System fixes
+    tui_step "6c" 7 "System fixes"
     if [[ "$SKIP_FIXES" == "true" ]]; then
         tui_muted "Skipped (--skip-fixes)"
     elif [[ "$DRY_RUN" == "true" ]]; then
@@ -784,8 +797,8 @@ main() {
     fi
     echo ""
     
-    # Step 6: Secrets & MCP
-    tui_step 6 6 "API keys & secrets"
+    # Step 7: Secrets & MCP
+    tui_step 7 7 "API keys & secrets"
     if [[ "$SKIP_SECRETS" == "true" ]]; then
         tui_muted "Skipped (--skip-secrets)"
     elif [[ "$DRY_RUN" == "true" ]]; then

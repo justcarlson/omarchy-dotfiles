@@ -1,0 +1,164 @@
+#!/bin/bash
+# omarchy - Omarchy system management tool
+# Usage: omarchy <command> [args]
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+MUTED='\033[0;90m'
+NC='\033[0m'
+
+# Paths
+SHELL_PREF_FILE="$HOME/.config/omarchy/shell"
+OMARCHY_FISH_DIR="$HOME/.local/share/omarchy/fish"
+OMARCHY_FISH_REPO="https://github.com/omacom-io/omarchy-fish.git"
+
+# =============================================================================
+# Helpers
+# =============================================================================
+
+info() { echo -e "${BLUE}$1${NC}"; }
+success() { echo -e "${GREEN}$1${NC}"; }
+warning() { echo -e "${YELLOW}$1${NC}"; }
+error() { echo -e "${RED}$1${NC}"; }
+muted() { echo -e "${MUTED}$1${NC}"; }
+
+get_shell_pref() {
+    [[ -f "$SHELL_PREF_FILE" ]] && cat "$SHELL_PREF_FILE" || echo "bash"
+}
+
+set_shell_pref() {
+    mkdir -p "$(dirname "$SHELL_PREF_FILE")"
+    echo "$1" > "$SHELL_PREF_FILE"
+    export OMARCHY_SHELL="$1"
+}
+
+# =============================================================================
+# Shell Commands
+# =============================================================================
+
+cmd_shell_fish() {
+    info "Switching to Fish shell..."
+    echo ""
+
+    # Install fish if not present
+    if ! command -v fish &>/dev/null; then
+        info "Installing Fish shell..."
+        if command -v yay &>/dev/null; then
+            yay -S --noconfirm fish
+        else
+            error "Please install fish: sudo pacman -S fish"
+            exit 1
+        fi
+    fi
+
+    # Clone or update omarchy-fish
+    if [[ -d "$OMARCHY_FISH_DIR" ]]; then
+        info "Updating omarchy-fish..."
+        (cd "$OMARCHY_FISH_DIR" && git pull --quiet) || true
+    else
+        info "Cloning omarchy-fish..."
+        mkdir -p "$(dirname "$OMARCHY_FISH_DIR")"
+        git clone --quiet "$OMARCHY_FISH_REPO" "$OMARCHY_FISH_DIR"
+    fi
+
+    # Run omarchy-fish setup
+    local setup_script="$OMARCHY_FISH_DIR/bin/omarchy-setup-fish"
+    if [[ -x "$setup_script" ]]; then
+        info "Running omarchy-fish setup..."
+        bash "$setup_script"
+    fi
+
+    # Configure fish to source secrets
+    local fish_config="$HOME/.config/fish/config.fish"
+    mkdir -p "$(dirname "$fish_config")"
+
+    if ! grep -q "Source secrets from ~/.secrets" "$fish_config" 2>/dev/null; then
+        info "Configuring Fish to source secrets..."
+        local secrets_block='# Source secrets from ~/.secrets (bash format export statements)
+if test -f ~/.secrets
+    for line in (grep -E "^export " ~/.secrets)
+        set -l kv (string replace "export " "" $line | string replace -r "=\"(.*)\"\\s*\$" "=\$1")
+        set -l key (string split -m1 "=" $kv)[1]
+        set -l val (string split -m1 "=" $kv)[2]
+        set -gx $key $val
+    end
+end
+
+'
+        if [[ -f "$fish_config" ]]; then
+            local temp_file
+            temp_file=$(mktemp)
+            echo "$secrets_block" > "$temp_file"
+            cat "$fish_config" >> "$temp_file"
+            mv "$temp_file" "$fish_config"
+        else
+            echo "$secrets_block" > "$fish_config"
+        fi
+    fi
+
+    set_shell_pref "fish"
+    echo ""
+    success "Fish shell configured!"
+    muted "Open a new terminal to use Fish"
+}
+
+cmd_shell_bash() {
+    info "Switching to Bash shell..."
+    set_shell_pref "bash"
+    echo ""
+    success "Bash shell configured!"
+    muted "Open a new terminal to use Bash"
+}
+
+cmd_shell_status() {
+    local current
+    current=$(get_shell_pref)
+    echo "Current shell preference: $current"
+    echo ""
+    echo "Installed shells:"
+    command -v bash &>/dev/null && echo "  - bash: $(command -v bash)"
+    command -v fish &>/dev/null && echo "  - fish: $(command -v fish)"
+}
+
+cmd_shell() {
+    case "${1:-}" in
+        fish)  cmd_shell_fish ;;
+        bash)  cmd_shell_bash ;;
+        status|"") cmd_shell_status ;;
+        *)
+            error "Unknown shell: $1"
+            echo "Usage: omarchy shell <bash|fish|status>"
+            exit 1
+            ;;
+    esac
+}
+
+# =============================================================================
+# Help
+# =============================================================================
+
+cmd_help() {
+    echo "omarchy - Omarchy system management tool"
+    echo ""
+    echo "Usage: omarchy <command> [args]"
+    echo ""
+    echo "Commands:"
+    echo "  shell <bash|fish>  - Switch default shell"
+    echo "  shell status       - Show current shell configuration"
+    echo "  help               - Show this help message"
+}
+
+# =============================================================================
+# Main
+# =============================================================================
+
+case "${1:-}" in
+    shell) shift; cmd_shell "$@" ;;
+    help|--help|-h|"") cmd_help ;;
+    *) error "Unknown command: $1"; cmd_help; exit 1 ;;
+esac
