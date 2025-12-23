@@ -1,6 +1,9 @@
 #!/bin/bash
 # omarchy - Omarchy system management tool
 # Usage: omarchy <command> [args]
+#
+# Note: Shell configuration logic here duplicates lib/shell.sh for standalone use.
+# Keep both in sync when making changes.
 
 set -e
 
@@ -34,6 +37,7 @@ get_shell_pref() {
 set_shell_pref() {
     mkdir -p "$(dirname "$SHELL_PREF_FILE")"
     echo "$1" > "$SHELL_PREF_FILE"
+    chmod 644 "$SHELL_PREF_FILE"
     export OMARCHY_SHELL="$1"
 }
 
@@ -63,7 +67,7 @@ cmd_shell_fish() {
     else
         info "Cloning omarchy-fish..."
         mkdir -p "$(dirname "$OMARCHY_FISH_DIR")"
-        git clone --quiet "$OMARCHY_FISH_REPO" "$OMARCHY_FISH_DIR"
+        git clone --quiet --depth 1 "$OMARCHY_FISH_REPO" "$OMARCHY_FISH_DIR"
     fi
 
     # Run omarchy-fish setup

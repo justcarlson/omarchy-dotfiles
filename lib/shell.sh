@@ -27,6 +27,7 @@ shell_set_preference() {
     local shell="$1"
     mkdir -p "$(dirname "$SHELL_PREF_FILE")"
     echo "$shell" > "$SHELL_PREF_FILE"
+    chmod 644 "$SHELL_PREF_FILE"
 
     # Also export for current session
     export OMARCHY_SHELL="$shell"
@@ -67,7 +68,7 @@ install_omarchy_fish() {
     else
         tui_info "Cloning omarchy-fish..."
         mkdir -p "$(dirname "$OMARCHY_FISH_DIR")"
-        if git clone --quiet "$OMARCHY_FISH_REPO" "$OMARCHY_FISH_DIR"; then
+        if git clone --quiet --depth 1 "$OMARCHY_FISH_REPO" "$OMARCHY_FISH_DIR"; then
             tui_success "omarchy-fish cloned"
         else
             tui_error "Could not clone omarchy-fish"
@@ -90,6 +91,10 @@ install_omarchy_fish() {
 }
 
 # Configure fish to source secrets
+# Fish secrets parsing expects ~/.secrets format:
+#   export KEY="value"
+# - Must use double quotes around value
+# - Handles values with spaces, but not embedded quotes
 configure_fish_secrets() {
     local fish_config="$HOME/.config/fish/config.fish"
 
