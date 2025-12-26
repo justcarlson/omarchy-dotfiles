@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.1](https://github.com/justcarlson/dotfiles/compare/v4.4.0...v4.4.1) (2025-12-26)
+
+
+### Bug Fixes
+
+* **fish:** add Alt+Backspace and Ctrl+Backspace keybindings ([#112](https://github.com/justcarlson/dotfiles/issues/112)) ([373ef13](https://github.com/justcarlson/dotfiles/commit/373ef1352a7c76dbd1d454402c40a9b65c9b946d)), closes [#111](https://github.com/justcarlson/dotfiles/issues/111)
+
 ## [4.4.0](https://github.com/justcarlson/dotfiles/compare/v4.3.0...v4.4.0) (2025-12-24)
 
 
