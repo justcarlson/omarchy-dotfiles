@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.0](https://github.com/justcarlson/dotfiles/compare/v4.4.1...v4.5.0) (2025-12-26)
+
+
+### Features
+
+* **opencode:** add YouTube tool and source secrets at startup ([#114](https://github.com/justcarlson/dotfiles/issues/114)) ([7824462](https://github.com/justcarlson/dotfiles/commit/7824462174ea50b2ef5308fc6f6c11673916d6c8))
+
 ## [4.4.1](https://github.com/justcarlson/dotfiles/compare/v4.4.0...v4.4.1) (2025-12-26)
 
 
